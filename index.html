@@ -4,21 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>موني مود | ستور - Money Mod</title>
-    <!-- أيقونة الموقع التي تظهر في المتصفح وعند البحث -->
     <link rel="icon" id="site-favicon" href="https://i.imgur.com/7kf5U8N.png">
     <style>
         body { font-family: Tahoma, sans-serif; background-color: #f0f4f8; margin: 0; padding: 10px; text-align: center; }
-        .container { max-width: 600px; margin: 0 auto; padding: 10px; }
-        h2 { color: #2c3e50; margin-bottom: 5px; }
-        p.subtitle { color: #7f8c8d; font-size: 14px; margin-bottom: 20px; }
+        .container { max-width: 600px; margin: 0 auto; padding: 10px; position: relative; }
         
-        .products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        /* زر أريد أصير مدير في أعلى اليسار */
+        #become-admin-link {
+            position: absolute;
+            top: 5px;
+            left: 10px;
+            font-size: 11px;
+            color: #7f8c8d;
+            cursor: pointer;
+            background: #e2e8f0;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        #become-admin-link:hover { background: #cbd5e1; color: #2c3e50; }
+
+        .products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; margin-bottom: 20px; }
         
         .product-card { background: #fff; border-radius: 16px; padding: 12px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #eaeaea; }
-        .product-card img { width: 90px; height: 90px; object-fit: cover; border-radius: 14px; margin: 0 auto 10px auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .product-title { font-size: 15px; font-weight: bold; color: #2c3e50; margin-bottom: 5px; min-height: 40px; display: flex; align-items: center; justify-content: center; }
-        .product-price { color: #27ae60; font-weight: bold; font-size: 14px; margin-bottom: 10px; }
+        .product-card img { width: 100px; height: 100px; object-fit: cover; border-radius: 14px; margin: 0 auto 10px auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .product-title { font-size: 15px; font-weight: bold; color: #2c3e50; margin-bottom: 8px; min-height: 35px; display: flex; align-items: center; justify-content: center; }
         
+        /* تقسيم السعر والمدة مثل الرسمة تماماً */
+        .product-info-box { display: flex; border-top: 1px solid #eee; padding-top: 8px; margin-bottom: 10px; }
+        .info-col { flex: 1; text-align: center; }
+        .info-col:first-child { border-left: 1px solid #eee; }
+        .info-label { font-size: 11px; color: #888; display: block; margin-bottom: 2px; }
+        .info-val { font-size: 13px; font-weight: bold; color: #27ae60; }
+        .info-val.duration { color: #2980b9; }
+
         .buy-btn { background-color: #25D366; color: white; border: none; padding: 8px; width: 100%; border-radius: 8px; font-size: 13px; cursor: pointer; font-weight: bold; }
         .buy-btn:hover { background-color: #1ebe5d; }
         
@@ -27,11 +46,9 @@
         .order-box { background: #fff; border-radius: 16px; padding: 15px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 2px solid #3498db; text-align: right; }
         input { width: 100%; padding: 10px; margin: 6px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
         
-        /* لوحة تحكم المشرفين (تكون منسدلة أو مخفية) */
         .admin-section { display: none; background: #fff; padding: 15px; border-radius: 16px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 2px dashed #3498db; text-align: right; }
         .image-upload-btn { display: block; background: #f8f9fa; border: 2px dashed #3498db; color: #3498db; padding: 10px; border-radius: 8px; text-align: center; cursor: pointer; font-weight: bold; margin: 8px 0; font-size: 13px; }
         
-        /* زر الدائرة العائمة للزائد في الجانب السفلي للمشرفين فقط */
         #floating-admin-btn {
             display: none;
             position: fixed;
@@ -58,13 +75,20 @@
 <body>
 
     <div class="container">
-        <h2>🛍️ موني مود - Money Mod</h2>
-        <p class="subtitle">اختر الاشتراك المناسب واطلب مباشرة</p>
+        <!-- زر أريد أصير مدير بأعلى اليسار -->
+        <span id="become-admin-link" onclick="registerAdminFlow()">أريد أصير مدير</span>
+
+        <!-- عنوان الموقع على سطرين -->
+        <div style="margin-top: 15px; margin-bottom: 15px;">
+            <h2 style="color: #2c3e50; margin: 0; font-size: 24px;">🛍️ موني مود</h2>
+            <span style="color: #e67e22; font-size: 13px; font-weight: bold; letter-spacing: 2px;">ســتــور (STORE)</span>
+        </div>
+        <p style="color: #7f8c8d; font-size: 13px; margin-bottom: 20px;">اختر الاشتراك المناسب واطلب مباشرة</p>
 
         <!-- شبكة المنتجات -->
         <div id="products-list" class="products-grid"></div>
 
-        <!-- نموذج إتمام الطلب -->
+        <!-- نموذج إتمام الطلب للزبون -->
         <div id="order-form-container" class="order-box hidden">
             <h3 id="selected-product-name" style="color: #2980b9; text-align: center; margin-top: 0;">إتمام الطلب</h3>
             <label style="font-size: 13px; font-weight: bold;">اسمك الكامل:</label>
@@ -75,11 +99,11 @@
             <button onclick="cancelOrder()" style="background-color: #95a5a6; color: white; border: none; padding: 8px; width: 100%; border-radius: 8px; margin-top: 5px; cursor: pointer;">إلغاء</button>
         </div>
 
-        <!-- لوحة تحكم المسؤولين (تفتح عند الضغط على زر الزائد العائم) -->
+        <!-- لوحة تحكم المسؤول -->
         <div id="admin-panel" class="admin-section">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <h4 style="color: #2980b9; margin: 0;">⚙️ لوحة إدارة المتجر</h4>
-                <button onclick="closeAdminPanel()" style="background: #e74c3c; width: auto; padding: 5px 10px; font-size: 12px;">إغلاق اللوحة</button>
+                <button onclick="closeAdminPanel()" style="background: #e74c3c; width: auto; padding: 5px 10px; font-size: 12px; border:none; color:white; border-radius:5px; cursor:pointer;">إغلاق</button>
             </div>
             <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
             
@@ -87,25 +111,21 @@
             <input type="text" id="admin-phone" placeholder="مثلاً: 9647800000000" oninput="savePhone()" style="background: #f9f9f9;">
             <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
 
-            <input type="text" id="new-name" placeholder="اسم الاشتراك (مثلاً: Gemini Pro)">
-            <input type="text" id="new-price" placeholder="السعر (مثلاً: 15,000 د.ع)">
+            <input type="text" id="new-name" placeholder="اسم المنتج (مثلاً: اشتراك جمبر)">
+            <input type="text" id="new-price" placeholder="سعر المنتج (مثلاً: 15 ألف)">
+            <input type="text" id="new-duration" placeholder="مدة المنتج (اختياري - مثلاً: 18 شهر)">
             
             <label class="image-upload-btn">
-                ➕ اضغط لاختيار صورة الاشتراك من المعرض
+                ➕ اضغط لاختيار صورة المنتج من المعرض
                 <input type="file" id="new-img-file" accept="image/*" style="display: none;">
             </label>
             <div id="file-name-display" style="font-size: 11px; color: #7f8c8d; margin-bottom: 8px; text-align: center;">لم يتم اختيار صورة بعد</div>
 
-            <button class="buy-btn" onclick="addProduct()" style="background-color: #2980b9;">➕ إضافة ونشر الاشتراك</button>
-        </div>
-
-        <!-- زر الدخول المخفي للإدارة في أسفل الصفحة -->
-        <div style="margin-top: 50px; text-align: center;">
-            <span onclick="loginAdmin()" style="color: #bdc3c7; font-size: 11px; cursor: pointer;">⚙️ تسجيل دخول المشرفين</span>
+            <button class="buy-btn" onclick="addProduct()" style="background-color: #2980b9;">➕ إضافة ونشر المنتج</button>
         </div>
     </div>
 
-    <!-- زر الدائرة العائمة المزود بعلامة الزائد (يظهر فقط للمسؤولين) -->
+    <!-- زر الدائرة العائمة للمدير -->
     <div id="floating-admin-btn" onclick="toggleAdminPanel()">+</div>
 
     <script>
@@ -115,27 +135,49 @@
 
         let selectedProduct = "";
         let base64Image = "";
-        let isAdmin = false;
+        
+        // التحقق مما إذا كانت المديرة مسجلة مسبقاً في ذاكرة المتجر للأبد
+        let isRegisteredAdmin = localStorage.getItem('store_is_admin') === 'true';
 
-        function loginAdmin() {
-            let pass = prompt("الرجاء إدخال كلمة مرور المشرف:");
-            if (pass === "2026") {
-                isAdmin = true;
-                document.getElementById('floating-admin-btn').style.display = 'block';
-                renderProducts();
-                alert("مرحباً بكِ أستاذتي! تم تفعيل صلاحيات الإدارة، راقبي زر الدائرة العائمة (+) أسفل الشاشة.");
-            } else {
-                alert("كلمة المرور خاطئة!");
+        if (isRegisteredAdmin) {
+            activateAdminMode();
+        }
+
+        function registerAdminFlow() {
+            if (isRegisteredAdmin) {
+                alert("أهلاً بكِ أستاذتي من جديد! أنتِ مسجلة كمديرة لهذا المتجر.");
+                toggleAdminPanel();
+                return;
             }
+
+            let phone = prompt("يرجى إدخال رقم هاتفكِ:");
+            if (!phone) return;
+            let country = prompt("من أي بلد أنتِ؟");
+            if (!country) return;
+            let city = prompt("ما هي محافظتكِ؟");
+            if (!city) return;
+
+            let confirmWord = prompt("اكتبي كلمة ( تم ) لتأكيد التسجيل وفتح صلاحيات الإدارة للأبد:");
+            if (confirmWord && confirmWord.trim() === "تم") {
+                localStorage.setItem('store_is_admin', 'true');
+                localStorage.setItem('admin_details', JSON.stringify({ phone, country, city }));
+                isRegisteredAdmin = true;
+                activateAdminMode();
+                alert("تم تسجيلكِ كمديرة بنجاح تام! ستظهر لكِ دائرة الزائد (+) أسفل الشاشة لإضافة المنتجات.");
+            } else {
+                alert("لم يتم إتمام التسجيل بشكل صحيح.");
+            }
+        }
+
+        function activateAdminMode() {
+            document.getElementById('floating-admin-btn').style.display = 'block';
+            document.getElementById('become-admin-link').innerText = "⚙️ الإدارة مفعلة";
+            renderProducts();
         }
 
         function toggleAdminPanel() {
             let panel = document.getElementById('admin-panel');
-            if (panel.style.display === 'block') {
-                panel.style.display = 'none';
-            } else {
-                panel.style.display = 'block';
-            }
+            panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
         }
 
         function closeAdminPanel() {
@@ -154,7 +196,6 @@
                 let reader = new FileReader();
                 reader.onload = function(event) {
                     base64Image = event.target.result;
-                    // تحديث أيقونة الموقع تلقائياً بأول صورة يرفعها المشرف كرمز للموقع
                     document.getElementById('site-favicon').href = base64Image;
                     localStorage.setItem('store_favicon', base64Image);
                 };
@@ -162,7 +203,6 @@
             }
         });
 
-        // استرجاع أيقونة الموقع المحفوظة إن وجدت
         let savedFavicon = localStorage.getItem('store_favicon');
         if (savedFavicon) {
             document.getElementById('site-favicon').href = savedFavicon;
@@ -171,22 +211,43 @@
         function renderProducts() {
             let list = document.getElementById('products-list');
             if (products.length === 0) {
-                list.innerHTML = `<p style="grid-column: span 2; color: #888; font-size: 13px; text-align: center;">لا توجد اشتراكات مضافة حالياً. اضغطي على زر (+) العائم بالأسفل بعد تسجيل الدخول لإضافة أول منتج!</p>`;
+                list.innerHTML = `<p style="grid-column: span 2; color: #888; font-size: 13px; text-align: center;">لا توجد منتجات مضافة حالياً.</p>`;
                 return;
             }
             list.innerHTML = "";
             products.forEach((p, index) => {
-                let deleteBtnHtml = isAdmin ? `<button class="delete-btn" style="display:block;" onclick="deleteProduct(${index})">حذف المنتج</button>` : '';
+                let deleteBtnHtml = isRegisteredAdmin ? `<button class="delete-btn" style="display:block;" onclick="deleteProduct(${index})">حذف المنتج</button>` : '';
                 
+                // عرض قسم المدة والسعر إذا كانت المدة موجودة
+                let durationHtml = p.duration ? `
+                    <div class="product-info-box">
+                        <div class="info-col">
+                            <span class="info-label">مدة المنتج:</span>
+                            <span class="info-val duration">${p.duration}</span>
+                        </div>
+                        <div class="info-col">
+                            <span class="info-label">سعر المنتج:</span>
+                            <span class="info-val">${p.price}</span>
+                        </div>
+                    </div>
+                ` : `
+                    <div class="product-info-box" style="justify-content: center;">
+                        <div class="info-col" style="border:none;">
+                            <span class="info-label">سعر المنتج:</span>
+                            <span class="info-val" style="font-size: 15px;">${p.price}</span>
+                        </div>
+                    </div>
+                `;
+
                 list.innerHTML += `
                     <div class="product-card">
                         <div>
                             <img src="${p.img}" alt="${p.name}">
-                            <div class="product-title">${p.name}</div>
-                            <div class="product-price">${p.price}</div>
+                            <div class="product-title">[ ${p.name} ]</div>
+                            ${durationHtml}
                         </div>
                         <div>
-                            <button class="buy-btn" onclick="openOrderForm('${p.name}')">طلب الاشتراك</button>
+                            <button class="buy-btn" onclick="openOrderForm('${p.name}')">طلب المنتج</button>
                             ${deleteBtnHtml}
                         </div>
                     </div>
@@ -197,30 +258,32 @@
         function addProduct() {
             let name = document.getElementById('new-name').value;
             let price = document.getElementById('new-price').value;
+            let duration = document.getElementById('new-duration').value;
 
             if(!name || !price) {
-                alert("يرجى ملء اسم الاشتراك والسعر على الأقل!");
+                alert("يرجى ملء اسم المنتج والسعر على الأقل!");
                 return;
             }
 
-            let finalImg = base64Image || 'https://via.placeholder.com/90?text=No+Image';
+            let finalImg = base64Image || 'https://via.placeholder.com/100?text=No+Image';
 
-            products.push({ name, price, img: finalImg });
+            products.push({ name, price, duration, img: finalImg });
             localStorage.setItem('store_products', JSON.stringify(products));
             
             document.getElementById('new-name').value = "";
             document.getElementById('new-price').value = "";
+            document.getElementById('new-duration').value = "";
             document.getElementById('new-img-file').value = "";
             document.getElementById('file-name-display').innerText = "لم يتم اختيار صورة بعد";
             base64Image = "";
             
             renderProducts();
             document.getElementById('admin-panel').style.display = 'none';
-            alert("تم إضافة الاشتراك بنجاح ونشره في متجر موني مود!");
+            alert("تم إضافة ونشر المنتج بنجاح!");
         }
 
         function deleteProduct(index) {
-            if(confirm("هل أنت متأكد من حذف هذا الاشتراك؟")) {
+            if(confirm("هل أنت متأكد من حذف هذا المنتج؟")) {
                 products.splice(index, 1);
                 localStorage.setItem('store_products', JSON.stringify(products));
                 renderProducts();
@@ -248,7 +311,7 @@
                 return;
             }
 
-            let message = `مرحباً، أريد طلب اشتراك من متجر موني مود:%0A- المنتج: ${selectedProduct}%0A- اسم الزبون: ${name}%0A- رقم الهاتف: ${phone}`;
+            let message = `مرحباً، أريد طلب هذا المنتج من متجر موني مود:%0A- المنتج: ${selectedProduct}%0A- اسم الزبون: ${name}%0A- رقم الهاتف: ${phone}`;
             let whatsappURL = `https://wa.me/${currentPhone}?text=${message}`;
             window.open(whatsappURL, '_blank');
         }
