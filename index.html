@@ -30,7 +30,7 @@
         .product-card img { width: 100px; height: 100px; object-fit: cover; border-radius: 14px; margin: 0 auto 10px auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
         .product-title { font-size: 15px; font-weight: bold; color: #2c3e50; margin-bottom: 8px; min-height: 35px; display: flex; align-items: center; justify-content: center; }
         
-        /* تقسيم السعر والمدة مثل الرسمة تماماً */
+        /* تقسيم السعر والمدة حسب الرسمة */
         .product-info-box { display: flex; border-top: 1px solid #eee; padding-top: 8px; margin-bottom: 10px; }
         .info-col { flex: 1; text-align: center; }
         .info-col:first-child { border-left: 1px solid #eee; }
@@ -129,6 +129,9 @@
     <div id="floating-admin-btn" onclick="toggleAdminPanel()">+</div>
 
     <script>
+        // كلمة السر الخاصة بالمدراء (يمكنك تغييرها هنا بين القوسين إن أردتِ)
+        const ADMIN_SECRET_CODE = "jojo2026"; 
+
         let products = JSON.parse(localStorage.getItem('store_products')) || [];
         let savedPhone = localStorage.getItem('store_target_phone') || "9647800680046";
         document.getElementById('admin-phone').value = savedPhone;
@@ -136,7 +139,6 @@
         let selectedProduct = "";
         let base64Image = "";
         
-        // التحقق مما إذا كانت المديرة مسجلة مسبقاً في ذاكرة المتجر للأبد
         let isRegisteredAdmin = localStorage.getItem('store_is_admin') === 'true';
 
         if (isRegisteredAdmin) {
@@ -156,14 +158,21 @@
             if (!country) return;
             let city = prompt("ما هي محافظتكِ؟");
             if (!city) return;
+            
+            // طلب كلمة السر السرية لضمان عدم دخول أي شخص غريب
+            let secret = prompt("أدخل كلمة السر الخاصة بصلاحيات الإدارة:");
+            if (secret !== ADMIN_SECRET_CODE) {
+                alert("كلمة السر غير صحيحة! لا يمكنك الحصول على صلاحيات الإدارة.");
+                return;
+            }
 
-            let confirmWord = prompt("اكتبي كلمة ( تم ) لتأكيد التسجيل وفتح صلاحيات الإدارة للأبد:");
+            let confirmWord = prompt("اكتبي كلمة ( تم ) لتأكيد التسجيل النهائي للأبد:");
             if (confirmWord && confirmWord.trim() === "تم") {
                 localStorage.setItem('store_is_admin', 'true');
                 localStorage.setItem('admin_details', JSON.stringify({ phone, country, city }));
                 isRegisteredAdmin = true;
                 activateAdminMode();
-                alert("تم تسجيلكِ كمديرة بنجاح تام! ستظهر لكِ دائرة الزائد (+) أسفل الشاشة لإضافة المنتجات.");
+                alert("تم تسجيلكِ كمديرة بنجاح تام! ستظهر لكِ دائرة الزائد (+) أسفل الشاشة لإضافة المنتجات وتحويل الطلبات لرقمكِ مباشرة.");
             } else {
                 alert("لم يتم إتمام التسجيل بشكل صحيح.");
             }
@@ -218,7 +227,6 @@
             products.forEach((p, index) => {
                 let deleteBtnHtml = isRegisteredAdmin ? `<button class="delete-btn" style="display:block;" onclick="deleteProduct(${index})">حذف المنتج</button>` : '';
                 
-                // عرض قسم المدة والسعر إذا كانت المدة موجودة
                 let durationHtml = p.duration ? `
                     <div class="product-info-box">
                         <div class="info-col">
