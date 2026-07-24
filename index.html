@@ -3,48 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>موني مود | ستور - Money Mod</title>
+    <title>موني مود | ستور الاحترافي - Money Mod</title>
     <link rel="icon" id="site-favicon" href="https://i.imgur.com/7kf5U8N.png">
     <style>
-        body { font-family: Tahoma, sans-serif; background-color: #f0f4f8; margin: 0; padding: 10px; text-align: center; }
-        .container { max-width: 600px; margin: 0 auto; padding: 10px; position: relative; }
+        :root {
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --accent-color: #10b981;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-secondary: #64748b;
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); margin: 0; padding: 15px; text-align: center; color: var(--text-main); }
+        .container { max-width: 650px; margin: 0 auto; padding: 10px; position: relative; }
         
+        /* زر الإدارة الاحترافي */
         #become-admin-link {
             position: absolute;
-            top: 5px;
+            top: 10px;
             left: 10px;
-            font-size: 11px;
-            color: #7f8c8d;
+            font-size: 12px;
+            color: var(--text-secondary);
             cursor: pointer;
             background: #e2e8f0;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
-        #become-admin-link:hover { background: #cbd5e1; color: #2c3e50; }
+        #become-admin-link:hover { background: #cbd5e1; color: var(--text-main); }
 
-        .products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; margin-bottom: 20px; }
+        /* رأس الموقع */
+        .store-header { background: linear-gradient(135deg, #4f46e5, #3b82f6); color: white; padding: 25px 20px; border-radius: 20px; margin-bottom: 25px; box-shadow: 0 10px 25px rgba(79, 70, 229, 0.2); }
+        .store-header h2 { margin: 0 0 5px 0; font-size: 26px; font-weight: 700; }
+        .store-header span { font-size: 14px; letter-spacing: 3px; font-weight: 600; opacity: 0.9; text-transform: uppercase; }
+
+        /* شبكة المنتجات الاحترافية */
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 25px; }
         
-        .product-card { background: #fff; border-radius: 16px; padding: 12px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #eaeaea; }
-        .product-card img { width: 100px; height: 100px; object-fit: cover; border-radius: 14px; margin: 0 auto 10px auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .product-title { font-size: 15px; font-weight: bold; color: #2c3e50; margin-bottom: 8px; min-height: 35px; display: flex; align-items: center; justify-content: center; }
+        .product-card { background: var(--card-bg); border-radius: 18px; padding: 15px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #f1f5f9; transition: transform 0.2s; }
+        .product-card:hover { transform: translateY(-3px); }
+        .product-card img { width: 110px; height: 110px; object-fit: cover; border-radius: 14px; margin: 0 auto 12px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+        .product-title { font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 10px; }
         
-        .product-info-box { display: flex; border-top: 1px solid #eee; padding-top: 8px; margin-bottom: 10px; }
+        .product-info-box { display: flex; background: #f8fafc; border-radius: 10px; padding: 8px; margin-bottom: 12px; border: 1px solid #e2e8f0; }
         .info-col { flex: 1; text-align: center; }
-        .info-col:first-child { border-left: 1px solid #eee; }
-        .info-label { font-size: 11px; color: #888; display: block; margin-bottom: 2px; }
-        .info-val { font-size: 13px; font-weight: bold; color: #27ae60; }
-        .info-val.duration { color: #2980b9; }
+        .info-col:first-child { border-left: 1px solid #e2e8f0; }
+        .info-label { font-size: 11px; color: var(--text-secondary); display: block; margin-bottom: 2px; }
+        .info-val { font-size: 13px; font-weight: 700; color: var(--accent-color); }
+        .info-val.duration { color: var(--primary-color); }
 
-        .buy-btn { background-color: #25D366; color: white; border: none; padding: 8px; width: 100%; border-radius: 8px; font-size: 13px; cursor: pointer; font-weight: bold; }
-        .buy-btn:hover { background-color: #1ebe5d; }
+        .buy-btn { background-color: var(--accent-color); color: white; border: none; padding: 10px; width: 100%; border-radius: 10px; font-size: 14px; cursor: pointer; font-weight: 700; transition: background 0.2s; }
+        .buy-btn:hover { background-color: #059669; }
         
-        .delete-btn { background-color: #e74c3c; color: white; border: none; padding: 5px; width: 100%; border-radius: 6px; font-size: 11px; cursor: pointer; margin-top: 5px; display: none; }
+        .delete-btn { background-color: #ef4444; color: white; border: none; padding: 6px; width: 100%; border-radius: 8px; font-size: 12px; cursor: pointer; margin-top: 8px; display: none; font-weight: 600; }
+        .delete-btn:hover { background-color: #dc2626; }
 
-        .order-box { background: #fff; border-radius: 16px; padding: 15px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 2px solid #3498db; text-align: right; }
-        input { width: 100%; padding: 10px; margin: 6px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        /* نموذج طلب احترافي متكامل للزبون */
+        .order-box { background: var(--card-bg); border-radius: 20px; padding: 20px; margin-top: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 2px solid var(--primary-color); text-align: right; }
+        .order-box h3 { color: var(--primary-color); margin-top: 0; text-align: center; font-size: 18px; }
         
-        .admin-section { display: none; background: #fff; padding: 15px; border-radius: 16px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 2px dashed #3498db; text-align: right; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { font-size: 13px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; }
+        input, select { width: 100%; padding: 11px; border: 1px solid #cbd5e1; border-radius: 10px; box-sizing: border-box; font-size: 14px; background: #f8fafc; }
+        input:focus, select:focus { outline: none; border-color: var(--primary-color); background: #fff; }
+        
+        /* لوحة تحكم المسؤول الاحترافية */
+        .admin-section { display: none; background: var(--card-bg); padding: 20px; border-radius: 20px; margin-top: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 2px dashed var(--primary-color); text-align: right; }
         
         #floating-admin-btn {
             display: none;
@@ -53,18 +80,18 @@
             left: 25px;
             width: 60px;
             height: 60px;
-            background-color: #2980b9;
+            background-color: var(--primary-color);
             color: white;
             border-radius: 50%;
             text-align: center;
-            font-size: 30px;
-            line-height: 58px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            font-size: 28px;
+            line-height: 60px;
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
             cursor: pointer;
             z-index: 1000;
             font-weight: bold;
         }
-        #floating-admin-btn:hover { background-color: #1f618d; }
+        #floating-admin-btn:hover { background-color: var(--primary-hover); }
 
         .hidden { display: none; }
     </style>
@@ -72,51 +99,75 @@
 <body>
 
     <div class="container">
+        <!-- زر تسجيل ودخول المدير -->
         <span id="become-admin-link" onclick="registerAdminFlow()">أريد أصير مدير</span>
 
-        <div style="margin-top: 15px; margin-bottom: 15px;">
-            <h2 style="color: #2c3e50; margin: 0; font-size: 24px;">🛍️ موني مود</h2>
-            <span style="color: #e67e22; font-size: 13px; font-weight: bold; letter-spacing: 2px;">ســتــور (STORE)</span>
+        <!-- رأس المتجر -->
+        <div class="store-header">
+            <h2>🛍️ موني مود ستور</h2>
+            <span>Official Store</span>
         </div>
-        <p style="color: #7f8c8d; font-size: 13px; margin-bottom: 20px;">اختر الاشتراك المناسب واطلب مباشرة</p>
 
+        <!-- قائمة المنتجات -->
         <div id="products-list" class="products-grid"></div>
 
+        <!-- نموذج إتمام الطلب الاحترافي (الاسم، الرقم، المحافظة، الدولة) -->
         <div id="order-form-container" class="order-box hidden">
-            <h3 id="selected-product-name" style="color: #2980b9; text-align: center; margin-top: 0;">إتمام الطلب</h3>
-            <label style="font-size: 13px; font-weight: bold;">اسمك الكامل:</label>
-            <input type="text" id="cust-name" placeholder="أدخل اسمك هنا">
-            <label style="font-size: 13px; font-weight: bold;">رقم هاتفـك:</label>
-            <input type="tel" id="cust-phone" placeholder="أدخل رقمك هنا">
-            <button class="buy-btn" onclick="submitOrder()" style="margin-top: 10px; font-size: 14px;">إرسال الطلب الآن</button>
-            <button onclick="cancelOrder()" style="background-color: #95a5a6; color: white; border: none; padding: 8px; width: 100%; border-radius: 8px; margin-top: 5px; cursor: pointer;">إلغاء</button>
+            <h3 id="selected-product-name">إتمام الطلب</h3>
+            
+            <div class="form-group">
+                <label>👤 الاسم الكامل:</label>
+                <input type="text" id="cust-name" placeholder="أدخل اسمك الثلاثي">
+            </div>
+            
+            <div class="form-group">
+                <label>📱 رقم الهاتف (للإتصال أو الواتساب):</label>
+                <input type="tel" id="cust-phone" placeholder="مثلاً: 07800000000">
+            </div>
+
+            <div class="form-group">
+                <label>🌍 الدولة:</label>
+                <input type="text" id="cust-country" placeholder="مثلاً: العراق">
+            </div>
+
+            <div class="form-group">
+                <label>🏙️ المحافظة / المدينة:</label>
+                <input type="text" id="cust-city" placeholder="مثلاً: بغداد">
+            </div>
+
+            <button class="buy-btn" onclick="submitOrder()" style="margin-top: 5px; font-size: 15px; background-color: #25D366;">إرسال الطلب عبر الواتساب 🟢</button>
+            <button onclick="cancelOrder()" style="background-color: #94a3b8; color: white; border: none; padding: 10px; width: 100%; border-radius: 10px; margin-top: 8px; cursor: pointer; font-weight: 600;">إلغاء</button>
         </div>
 
+        <!-- لوحة التحكم الخاصة بالمدير -->
         <div id="admin-panel" class="admin-section">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h4 style="color: #2980b9; margin: 0;">⚙️ لوحة إدارة المتجر</h4>
-                <button onclick="closeAdminPanel()" style="background: #e74c3c; width: auto; padding: 5px 10px; font-size: 12px; border:none; color:white; border-radius:5px; cursor:pointer;">إغلاق</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h4 style="color: var(--primary-color); margin: 0; font-size: 16px;">⚙️ لوحة إدارة المتجر الاحترافية</h4>
+                <button onclick="closeAdminPanel()" style="background: #ef4444; width: auto; padding: 5px 12px; font-size: 12px; border:none; color:white; border-radius:6px; cursor:pointer; font-weight:600;">إغلاق</button>
             </div>
-            <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
             
-            <label style="font-size: 12px; font-weight: bold; color: #555;">رقم واتساب استلام الطلبات:</label>
-            <input type="text" id="admin-phone" placeholder="مثلاً: 9647800000000" oninput="savePhone()" style="background: #f9f9f9;">
-            <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
+            <div class="form-group">
+                <label>📞 رقم واتساب استقبال الطلبات الأساسي:</label>
+                <input type="text" id="admin-phone" placeholder="مثلاً: 9647800000000" oninput="savePhone()">
+            </div>
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 15px 0;">
 
-            <input type="text" id="new-name" placeholder="اسم المنتج (مثلاً: اشتراك جمبر)">
-            <input type="text" id="new-price" placeholder="سعر المنتج (مثلاً: 15 ألف)">
-            <input type="text" id="new-duration" placeholder="مدة المنتج (اختياري - مثلاً: 18 شهر)">
-            <input type="text" id="new-img-url" placeholder="رابط صورة المنتج (رابط مباشر للصورة)">
+            <div class="form-group"><label>📦 اسم المنتج الجديد:</label><input type="text" id="new-name" placeholder="مثلاً: اشتراك برو"></div>
+            <div class="form-group"><label>💰 السعر:</label><input type="text" id="new-price" placeholder="مثلاً: 15 ألف"></div>
+            <div class="form-group"><label>⏳ المدة (اختياري):</label><input type="text" id="new-duration" placeholder="مثلاً: 18 شهر"></div>
+            <div class="form-group"><label>🔗 رابط صورة المنتج (رابط مباشر آمن):</label><input type="text" id="new-img-url" placeholder="ضع رابط الصورة هنا"></div>
 
-            <button class="buy-btn" onclick="addProduct()" style="background-color: #2980b9; margin-top: 10px;">➕ إضافة ونشر المنتج</button>
+            <button class="buy-btn" onclick="addProduct()" style="background-color: var(--primary-color); margin-top: 5px;">➕ نشر المنتج رسمياً</button>
         </div>
     </div>
 
+    <!-- زر القائمة العائمة للمدير -->
     <div id="floating-admin-btn" onclick="toggleAdminPanel()">+</div>
 
     <script>
-        const ADMIN_SECRET_CODE = "2026"; 
+        const ADMIN_SECRET_CODE = "jojo2026"; 
 
+        // منتجات افتراضية أساسية بصور ثابتة ومضمونة 100% لتظهر بكل الأجهزة والمتصفحات الخفية
         const defaultProducts = [
             {
                 name: "جيماني برو",
@@ -127,7 +178,7 @@
             {
                 name: "موني مود ستور",
                 price: "1",
-                duration: "",
+                duration: "دائم",
                 img: "https://i.imgur.com/7kf5U8N.png"
             }
         ];
@@ -167,7 +218,7 @@
                 localStorage.setItem('store_is_admin', 'true');
                 isRegisteredAdmin = true;
                 activateAdminMode();
-                alert("تم تسجيلكِ كمديرة بنجاح تام!");
+                alert("تم تفعيل صلاحيات الإدارة بنجاح تام!");
             }
         }
 
@@ -204,18 +255,18 @@
                 let durationHtml = p.duration ? `
                     <div class="product-info-box">
                         <div class="info-col">
-                            <span class="info-label">مدة المنتج:</span>
+                            <span class="info-label">المدة:</span>
                             <span class="info-val duration">${p.duration}</span>
                         </div>
                         <div class="info-col">
-                            <span class="info-label">سعر المنتج:</span>
+                            <span class="info-label">السعر:</span>
                             <span class="info-val">${p.price}</span>
                         </div>
                     </div>
                 ` : `
                     <div class="product-info-box" style="justify-content: center;">
                         <div class="info-col" style="border:none;">
-                            <span class="info-label">سعر المنتج:</span>
+                            <span class="info-label">السعر:</span>
                             <span class="info-val" style="font-size: 15px;">${p.price}</span>
                         </div>
                     </div>
@@ -225,11 +276,11 @@
                     <div class="product-card">
                         <div>
                             <img src="${p.img}" alt="${p.name}">
-                            <div class="product-title">[ ${p.name} ]</div>
+                            <div class="product-title">${p.name}</div>
                             ${durationHtml}
                         </div>
                         <div>
-                            <button class="buy-btn" onclick="openOrderForm('${p.name}')">طلب المنتج</button>
+                            <button class="buy-btn" onclick="openOrderForm('${p.name}')">اطلب الآن 🛒</button>
                             ${deleteBtnHtml}
                         </div>
                     </div>
@@ -260,7 +311,7 @@
             
             renderProducts();
             document.getElementById('admin-panel').style.display = 'none';
-            alert("تم إضافة المنتج بنجاح!");
+            alert("تم إضافة ونشر المنتج بنجاح!");
         }
 
         function deleteProduct(index) {
@@ -273,7 +324,7 @@
 
         function openOrderForm(productName) {
             selectedProduct = productName;
-            document.getElementById('selected-product-name').innerText = "طلب: " + productName;
+            document.getElementById('selected-product-name').innerText = "طلب منتج: " + productName;
             document.getElementById('order-form-container').classList.remove('hidden');
             window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
         }
@@ -283,16 +334,27 @@
         }
 
         function submitOrder() {
-            let name = document.getElementById('cust-name5').value || document.getElementById('cust-name').value;
-            let phone = document.getElementById('cust-phone').value;
+            let name = document.getElementById('cust-name').value.trim();
+            let phone = document.getElementById('cust-phone').value.trim();
+            let country = document.getElementById('cust-country').value.trim();
+            let city = document.getElementById('cust-city').value.trim();
             let currentPhone = document.getElementById('admin-phone').value || "9647800680046";
 
-            if(!name || !phone) {
-                alert("يرجى إدخال الاسم ورقم الهاتف!");
+            if(!name || !phone || !country || !city) {
+                alert("يرجى ملء جميع الحقول (الاسم، رقم الهاتف، الدولة، والمحافظة) لضمان إرسال الطلب بدقة!");
                 return;
             }
 
-            let message = `مرحباً، أريد طلب هذا المنتج من متجر موني مود:%0A- المنتج: ${selectedProduct}%0A- اسم الزبون: ${name}%0A- رقم الهاتف: ${phone}`;
+            // تنسيق الرسالة بشكل احترافي يوصل للواتساب بالتفصيل الكامل
+            let message = `🛒 *طلب جديد من المتجر*:%0A` +
+                          `---------------------------%0A` +
+                          `📦 *المنتج:* ${selectedProduct}%0A` +
+                          `👤 *اسم الزبون:* ${name}%0A` +
+                          `📱 *رقم الهاتف:* ${phone}%0A` +
+                          `🌍 *الدولة:* ${country}%0A` +
+                          `🏙️ *المحافظة:* ${city}%0A` +
+                          `---------------------------`;
+            
             let whatsappURL = `https://wa.me/${currentPhone}?text=${message}`;
             window.open(whatsappURL, '_blank');
         }
@@ -302,4 +364,3 @@
 
 </body>
 </html>
-
