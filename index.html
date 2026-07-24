@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر الاشتراكات الرقمية</title>
+    <title>موني مود | ستور - Money Mod</title>
+    <!-- أيقونة الموقع التي تظهر في المتصفح وعند البحث -->
+    <link rel="icon" id="site-favicon" href="https://i.imgur.com/7kf5U8N.png">
     <style>
         body { font-family: Tahoma, sans-serif; background-color: #f0f4f8; margin: 0; padding: 10px; text-align: center; }
         .container { max-width: 600px; margin: 0 auto; padding: 10px; }
@@ -25,19 +27,41 @@
         .order-box { background: #fff; border-radius: 16px; padding: 15px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 2px solid #3498db; text-align: right; }
         input { width: 100%; padding: 10px; margin: 6px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
         
-        .admin-section { display: none; background: #fff; padding: 15px; border-radius: 16px; margin-top: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 2px dashed #3498db; text-align: right; }
+        /* لوحة تحكم المشرفين (تكون منسدلة أو مخفية) */
+        .admin-section { display: none; background: #fff; padding: 15px; border-radius: 16px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 2px dashed #3498db; text-align: right; }
         .image-upload-btn { display: block; background: #f8f9fa; border: 2px dashed #3498db; color: #3498db; padding: 10px; border-radius: 8px; text-align: center; cursor: pointer; font-weight: bold; margin: 8px 0; font-size: 13px; }
         
+        /* زر الدائرة العائمة للزائد في الجانب السفلي للمشرفين فقط */
+        #floating-admin-btn {
+            display: none;
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            width: 60px;
+            height: 60px;
+            background-color: #2980b9;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 30px;
+            line-height: 58px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
+            z-index: 1000;
+            font-weight: bold;
+        }
+        #floating-admin-btn:hover { background-color: #1f618d; }
+
         .hidden { display: none; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h2>🛍️ متجر الاشتراكات الرقمية</h2>
+        <h2>🛍️ موني مود - Money Mod</h2>
         <p class="subtitle">اختر الاشتراك المناسب واطلب مباشرة</p>
 
-        <!-- شبكة المنتجات (تبدأ فارغة تماماً) -->
+        <!-- شبكة المنتجات -->
         <div id="products-list" class="products-grid"></div>
 
         <!-- نموذج إتمام الطلب -->
@@ -51,13 +75,17 @@
             <button onclick="cancelOrder()" style="background-color: #95a5a6; color: white; border: none; padding: 8px; width: 100%; border-radius: 8px; margin-top: 5px; cursor: pointer;">إلغاء</button>
         </div>
 
-        <!-- لوحة تحكم المسؤولين -->
+        <!-- لوحة تحكم المسؤولين (تفتح عند الضغط على زر الزائد العائم) -->
         <div id="admin-panel" class="admin-section">
-            <h4 style="color: #2980b9; text-align: center; margin-top: 0;">⚙️ لوحة إدارة المتجر والمشرفين</h4>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h4 style="color: #2980b9; margin: 0;">⚙️ لوحة إدارة المتجر</h4>
+                <button onclick="closeAdminPanel()" style="background: #e74c3c; width: auto; padding: 5px 10px; font-size: 12px;">إغلاق اللوحة</button>
+            </div>
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
             
             <label style="font-size: 12px; font-weight: bold; color: #555;">رقم واتساب استلام الطلبات:</label>
             <input type="text" id="admin-phone" placeholder="مثلاً: 9647800000000" oninput="savePhone()" style="background: #f9f9f9;">
-            <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
 
             <input type="text" id="new-name" placeholder="اسم الاشتراك (مثلاً: Gemini Pro)">
             <input type="text" id="new-price" placeholder="السعر (مثلاً: 15,000 د.ع)">
@@ -73,12 +101,14 @@
 
         <!-- زر الدخول المخفي للإدارة في أسفل الصفحة -->
         <div style="margin-top: 50px; text-align: center;">
-            <span onclick="loginAdmin()" style="color: #d1d8e0; font-size: 12px; cursor: pointer;">⚙️ دخول الإدارة</span>
+            <span onclick="loginAdmin()" style="color: #bdc3c7; font-size: 11px; cursor: pointer;">⚙️ تسجيل دخول المشرفين</span>
         </div>
     </div>
 
+    <!-- زر الدائرة العائمة المزود بعلامة الزائد (يظهر فقط للمسؤولين) -->
+    <div id="floating-admin-btn" onclick="toggleAdminPanel()">+</div>
+
     <script>
-        // تبدأ القائمة فارغة تماماً بدون منتجات افتراضية
         let products = JSON.parse(localStorage.getItem('store_products')) || [];
         let savedPhone = localStorage.getItem('store_target_phone') || "9647800680046";
         document.getElementById('admin-phone').value = savedPhone;
@@ -91,12 +121,25 @@
             let pass = prompt("الرجاء إدخال كلمة مرور المشرف:");
             if (pass === "2026") {
                 isAdmin = true;
-                document.getElementById('admin-panel').style.display = 'block';
+                document.getElementById('floating-admin-btn').style.display = 'block';
                 renderProducts();
-                alert("تم تسجيل الدخول بنجاح!");
+                alert("مرحباً بكِ أستاذتي! تم تفعيل صلاحيات الإدارة، راقبي زر الدائرة العائمة (+) أسفل الشاشة.");
             } else {
                 alert("كلمة المرور خاطئة!");
             }
+        }
+
+        function toggleAdminPanel() {
+            let panel = document.getElementById('admin-panel');
+            if (panel.style.display === 'block') {
+                panel.style.display = 'none';
+            } else {
+                panel.style.display = 'block';
+            }
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('admin-panel').style.display = 'none';
         }
 
         function savePhone() {
@@ -111,15 +154,24 @@
                 let reader = new FileReader();
                 reader.onload = function(event) {
                     base64Image = event.target.result;
+                    // تحديث أيقونة الموقع تلقائياً بأول صورة يرفعها المشرف كرمز للموقع
+                    document.getElementById('site-favicon').href = base64Image;
+                    localStorage.setItem('store_favicon', base64Image);
                 };
                 reader.readAsDataURL(file);
             }
         });
 
+        // استرجاع أيقونة الموقع المحفوظة إن وجدت
+        let savedFavicon = localStorage.getItem('store_favicon');
+        if (savedFavicon) {
+            document.getElementById('site-favicon').href = savedFavicon;
+        }
+
         function renderProducts() {
             let list = document.getElementById('products-list');
             if (products.length === 0) {
-                list.innerHTML = `<p style="grid-column: span 2; color: #888; font-size: 13px; text-align: center;">لا توجد اشتراكات مضافة حالياً. سجلي دخول الإدارة من أسفل الصفحة لإضافة أول منتج!</p>`;
+                list.innerHTML = `<p style="grid-column: span 2; color: #888; font-size: 13px; text-align: center;">لا توجد اشتراكات مضافة حالياً. اضغطي على زر (+) العائم بالأسفل بعد تسجيل الدخول لإضافة أول منتج!</p>`;
                 return;
             }
             list.innerHTML = "";
@@ -163,7 +215,8 @@
             base64Image = "";
             
             renderProducts();
-            alert("تم إضافة الاشتراك بنجاح!");
+            document.getElementById('admin-panel').style.display = 'none';
+            alert("تم إضافة الاشتراك بنجاح ونشره في متجر موني مود!");
         }
 
         function deleteProduct(index) {
@@ -195,7 +248,7 @@
                 return;
             }
 
-            let message = `مرحباً، أريد طلب اشتراك:%0A- المنتج: ${selectedProduct}%0A- اسم الزبون: ${name}%0A- رقم الهاتف: ${phone}`;
+            let message = `مرحباً، أريد طلب اشتراك من متجر موني مود:%0A- المنتج: ${selectedProduct}%0A- اسم الزبون: ${name}%0A- رقم الهاتف: ${phone}`;
             let whatsappURL = `https://wa.me/${currentPhone}?text=${message}`;
             window.open(whatsappURL, '_blank');
         }
@@ -205,3 +258,4 @@
 
 </body>
 </html>
+
