@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>متجر الاشتراكات الرقمية</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background: #f4f4f9; text-align: center; padding: 40px; }
+        .box { background: white; padding: 25px; border-radius: 12px; display: inline-block; box-shadow: 0px 4px 15px rgba(0,0,0,0.1); width: 320px; text-align: right; }
+        h2 { text-align: center; color: #333; }
+        label { display: block; margin-top: 10px; font-weight: bold; font-size: 14px; color: #555; }
+        input, select, button { width: 100%; padding: 12px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        button { background: #28a745; color: white; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #218838; }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <h2>متجر الاشتراكات</h2>
+        <p style="text-align: center; font-size: 13px; color: #666;">الدفع عند الاستلام</p>
+        
+        <!-- نموذج إرسال الطلب -->
+        <form action="/submit_order" method="POST">
+            <label>اسمك الكامل:</label>
+            <input type="text" name="name" placeholder="أدخل اسمك هنا" required>
+
+            <label>رقم الهاتف للتواصل:</label>
+            <input type="text" name="phone" placeholder="مثال: 078xxxxxxxx" required>
+
+            <label>اختر الاشتراك المطلوب:</label>
+            <select name="item">
+                <option value="اشتراك نتفليكس شهري">اشتراك نتفليكس شهري</option>
+                <option value="اشتراك يوتيوب بريميم">اشتراك يوتيوب بريميم</option>
+                <option value="اشتراك شاهد VIP">اشتراك شاهد VIP</option>
+            </select>
+
+            <button type="submit">إتمام الطلب</button>
+        </form>
+    </div>
+
+</body>
+</html>
+
