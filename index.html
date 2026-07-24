@@ -4,23 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- معلومات تظهر في بحث جوجل (SEO) -->
     <title>موني مود ستور : بوابتك لأرقى الخدمات الرقمية والحلول الذكية</title>
     <meta name="description" content="اكتشف أسرع وأضمن الخدمات الرقمية في متجر موني مود. أسعار مناسبة وتجربة استثنائية.">
-    <meta name="keywords" content="موني مود, متجر اشتراكات, خدمات رقمية, Money Mod Store">
     
-    <link rel="icon" id="site-favicon" href="https://i.imgur.com/7kf5U8N.png">
+    <!-- شعار المتجر الذي أرسلتيه -->
+    <link rel="icon" id="site-favicon" href="https://i.imgur.com/kHI9Abj.png">
     
-    <!-- Open Graph لظهور الموقع بشكل مرتب في المتصفحات ومحركات البحث -->
     <meta property="og:title" content="موني مود ستور : بوابتك لأرقى الخدمات الرقمية">
     <meta property="og:description" content="أسرع وأضمن الخدمات الرقمية في متجر موني مود.">
-    <meta property="og:image" content="https://i.imgur.com/7kf5U8N.png">
+    <meta property="og:image" content="https://i.imgur.com/kHI9Abj.png">
 
     <style>
         body { font-family: Tahoma, sans-serif; background-color: #f0f4f8; margin: 0; padding: 10px; text-align: center; }
         .container { max-width: 600px; margin: 0 auto; padding: 10px; position: relative; }
         
-        /* زر القائمة الجانبية (الثلاث خطوط) */
         #menu-toggle-btn {
             position: absolute;
             top: 10px;
@@ -37,7 +34,6 @@
         }
         #menu-toggle-btn:hover { background: #e2e8f0; }
 
-        /* القائمة الجانبية السحب (Sidebar) */
         #sidebar {
             height: 100%;
             width: 0;
@@ -73,10 +69,7 @@
             cursor: pointer;
         }
 
-        /* شريط البحث */
-        .search-box {
-            margin: 15px 0;
-        }
+        .search-box { margin: 15px 0; }
         .search-box input {
             width: 100%;
             padding: 10px 15px;
@@ -105,7 +98,9 @@
         .buy-btn { background-color: #25D366; color: white; border: none; padding: 8px; width: 100%; border-radius: 8px; font-size: 13px; cursor: pointer; font-weight: bold; }
         .buy-btn:hover { background-color: #1ebe5d; }
         
-        .delete-btn { background-color: #e74c3c; color: white; border: none; padding: 5px; width: 100%; border-radius: 6px; font-size: 11px; cursor: pointer; margin-top: 5px; display: none; }
+        .admin-action-row { display: flex; gap: 5px; margin-top: 5px; }
+        .edit-btn { background-color: #f39c12; color: white; border: none; padding: 5px; width: 50%; border-radius: 6px; font-size: 11px; cursor: pointer; display: none; font-weight: bold; }
+        .delete-btn { background-color: #e74c3c; color: white; border: none; padding: 5px; width: 50%; border-radius: 6px; font-size: 11px; cursor: pointer; display: none; font-weight: bold; }
 
         .order-box { background: #fff; border-radius: 16px; padding: 15px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 2px solid #3498db; text-align: right; }
         .order-box input { width: 100%; padding: 10px; margin: 6px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
@@ -138,10 +133,8 @@
 </head>
 <body>
 
-    <!-- زر الثلاث خطوط للقائمة الجانبية -->
     <div id="menu-toggle-btn" onclick="toggleSidebar()">☰</div>
 
-    <!-- القائمة الجانبية (Sidebar) -->
     <div id="sidebar">
         <button class="close-btn" onclick="toggleSidebar()">✕</button>
         <h3 style="padding: 0 20px; color: #2c3e50; margin-bottom: 15px;">⚙️ الإعدادات</h3>
@@ -151,20 +144,20 @@
     </div>
 
     <div class="container">
-        <div style="margin-top: 25px; margin-bottom: 15px;">
+        <div style="margin-top: 25px; margin-bottom: 15px; display: flex; flex-direction: column; align-items: center;">
+            <!-- عرض شعار المتجر الذي أرسلتيه بشكل دائري أنيق -->
+            <img src="https://i.imgur.com/kHI9Abj.png" alt="Money Mod Store" style="width: 75px; height: 75px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.2); margin-bottom: 8px; border: 2px solid #2c3e50;">
             <h2 style="color: #2c3e50; margin: 0; font-size: 24px;">🚀 موني مود ستور</h2>
             <span style="color: #e67e22; font-size: 13px; font-weight: bold; letter-spacing: 2px;">MONEY MOD STORE</span>
         </div>
         <p style="color: #7f8c8d; font-size: 13px; margin-bottom: 15px;">عالمك الأسهل للحصول على أفضل الخدمات الرقمية فوراً</p>
 
-        <!-- شريط البحث -->
         <div class="search-box">
             <input type="text" id="search-input" placeholder="🔍 شنو الخدمة أو المنتج اللي تبحث عنه؟..." oninput="filterProducts()">
         </div>
 
         <div id="products-list" class="products-grid"></div>
 
-        <!-- نموذج إتمام الطلب -->
         <div id="order-form-container" class="order-box hidden">
             <h3 id="selected-product-name" style="color: #2980b9; text-align: center; margin-top: 0;">تثبيت الطلب</h3>
             
@@ -186,7 +179,7 @@
 
         <div id="admin-panel" class="admin-section">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h4 style="color: #2980b9; margin: 0;">⚙️ لوحة تحكم المتجر</h4>
+                <h4 id="admin-panel-title" style="color: #2980b9; margin: 0;">⚙️ إضافة منتج جديد</h4>
                 <button onclick="closeAdminPanel()" style="background: #e74c3c; width: auto; padding: 5px 10px; font-size: 12px; border:none; color:white; border-radius:5px; cursor:pointer;">إغلاق</button>
             </div>
             <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
@@ -195,36 +188,25 @@
             <input type="text" id="admin-phone" placeholder="مثلاً: 9647800000000" oninput="savePhone()" style="background: #f9f9f9;">
             <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
 
+            <input type="hidden" id="edit-index" value="-1">
             <input type="text" id="new-name" placeholder="عنوان الخدمة أو المنتج">
             <input type="text" id="new-price" placeholder="السعر (مثلاً: 15 ألف)">
             <input type="text" id="new-duration" placeholder="المدة أو التفاصيل (اختياري)">
-            <input type="text" id="new-img-url" placeholder="رابط صورة المنتج المباشر">
+            
+            <label style="font-size: 12px; font-weight: bold; color: #555; display: block; text-align: right; margin-top: 5px;">اختر صورة المنتج من الموبايل (كل الصيغة مقبولة):</label>
+            <input type="file" id="new-img-file" accept="image/*" style="background: #f9f9f9; padding: 8px;">
 
-            <button class="buy-btn" onclick="addProduct()" style="background-color: #2980b9; margin-top: 10px;">➕ نشر المنتج الجديد</button>
+            <button class="buy-btn" id="save-product-btn" onclick="saveProduct()" style="background-color: #2980b9; margin-top: 10px;">➕ نشر المنتج الجديد</button>
         </div>
     </div>
 
-    <div id="floating-admin-btn" onclick="toggleAdminPanel()">+</div>
+    <div id="floating-admin-btn" onclick="openAddMode()">+</div>
 
     <script>
         const ADMIN_SECRET_CODE = "2026"; 
 
-        const defaultProducts = [
-            {
-                name: "جيماني برو",
-                price: "15 ألف",
-                duration: "18 شهر",
-                img: "https://i.imgur.com/7kf5U8N.png"
-            },
-            {
-                name: "موني مود ستور",
-                price: "1",
-                duration: "",
-                img: "https://i.imgur.com/7kf5U8N.png"
-            }
-        ];
-
-        let products = JSON.parse(localStorage.getItem('store_products')) || defaultProducts;
+        // بدأنا بمتجر فارغ تماماً مثل ما طلبتِ
+        let products = JSON.parse(localStorage.getItem('store_products')) || [];
         let savedPhone = localStorage.getItem('store_target_phone') || "9647800680046";
         document.getElementById('admin-phone').value = savedPhone;
 
@@ -301,6 +283,17 @@
             panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
         }
 
+        function openAddMode() {
+            document.getElementById('edit-index').value = "-1";
+            document.getElementById('admin-panel-title').innerText = "⚙️ إضافة منتج جديد";
+            document.getElementById('save-product-btn').innerText = "➕ نشر المنتج الجديد";
+            document.getElementById('new-name').value = "";
+            document.getElementById('new-price').value = "";
+            document.getElementById('new-duration').value = "";
+            document.getElementById('new-img-file').value = "";
+            toggleAdminPanel();
+        }
+
         function closeAdminPanel() {
             document.getElementById('admin-panel').style.display = 'none';
         }
@@ -315,13 +308,18 @@
             let filtered = products.filter(p => p.name.toLowerCase().includes(filterText.toLowerCase()));
 
             if (filtered.length === 0) {
-                list.innerHTML = `<p style="grid-column: span 2; color: #888; font-size: 13px; text-align: center;">عذراً، لا توجد نتائج مطابقة لبحثك.</p>`;
+                list.innerHTML = `<p style="grid-column: span 2; color: #888; font-size: 13px; text-align: center;">لا توجد منتجات حالياً في المتجر.</p>`;
                 return;
             }
             list.innerHTML = "";
             filtered.forEach((p, index) => {
                 let originalIndex = products.indexOf(p);
-                let deleteBtnHtml = isRegisteredAdmin ? `<button class="delete-btn" style="display:block;" onclick="deleteProduct(${originalIndex})">حذف الخدمة</button>` : '';
+                let adminActionHtml = isRegisteredAdmin ? `
+                    <div class="admin-action-row">
+                        <button class="edit-btn" style="display:block;" onclick="editProduct(${originalIndex})">تعديل</button>
+                        <button class="delete-btn" style="display:block;" onclick="deleteProduct(${originalIndex})">حذف</button>
+                    </div>
+                ` : '';
                 
                 let durationHtml = p.duration ? `
                     <div class="product-info-box">
@@ -352,7 +350,7 @@
                         </div>
                         <div>
                             <button class="buy-btn" onclick="openOrderForm('${p.name}')">اطلب الآن</button>
-                            ${deleteBtnHtml}
+                            ${adminActionHtml}
                         </div>
                     </div>
                 `;
@@ -364,78 +362,59 @@
             renderProducts(query);
         }
 
-        function addProduct() {
+        function saveProduct() {
             let name = document.getElementById('new-name').value;
             let price = document.getElementById('new-price').value;
             let duration = document.getElementById('new-duration').value;
-            let imgUrl = document.getElementById('new-img-url').value;
+            let editIndex = parseInt(document.getElementById('edit-index').value);
+            let fileInput = document.getElementById('new-img-file');
 
             if(!name || !price) {
                 alert("يرجى كتابة عنوان الخدمة والسعر أولاً!");
                 return;
             }
 
-            let finalImg = imgUrl.trim() !== "" ? imgUrl : 'https://i.imgur.com/7kf5U8N.png';
+            let defaultImg = "https://i.imgur.com/kHI9Abj.png";
 
-            products.push({ name, price, duration, img: finalImg });
+            if (fileInput.files && fileInput.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    let base64Image = e.target.result;
+                    processSaving(name, price, duration, base64Image, editIndex);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                let existingImg = editIndex !== -1 ? products[editIndex].img : defaultImg;
+                processSaving(name, price, duration, existingImg, editIndex);
+            }
+        }
+
+        function processSaving(name, price, duration, img, editIndex) {
+            if (editIndex !== -1) {
+                products[editIndex] = { name, price, duration, img };
+                alert("تم تحديث المنتج بنجاح!");
+            } else {
+                products.push({ name, price, duration, img });
+                alert("تم إضافة ونشر المنتج بنجاح!");
+            }
+
             localStorage.setItem('store_products', JSON.stringify(products));
-            
             document.getElementById('new-name').value = "";
             document.getElementById('new-price').value = "";
             document.getElementById('new-duration').value = "";
-            document.getElementById('new-img-url').value = "";
+            document.getElementById('new-img-file').value = "";
+            document.getElementById('edit-index').value = "-1";
             
             renderProducts();
             document.getElementById('admin-panel').style.display = 'none';
-            alert("تم إضافة المنتج ونشره بنجاح!");
         }
 
-        function deleteProduct(index) {
-            if(confirm("هل متأكد من حذف هذا المنتج نهائياً؟")) {
-                products.splice(index, 1);
-                localStorage.setItem('store_products', JSON.stringify(products));
-                renderProducts();
-            }
-        }
-
-        function openOrderForm(productName) {
-            selectedProduct = productName;
-            document.getElementById('selected-product-name').innerText = "طلب خدمة: " + productName;
-            document.getElementById('order-form-container').classList.remove('hidden');
-            window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
-        }
-
-        function cancelOrder() {
-            document.getElementById('order-form-container').classList.add('hidden');
-        }
-
-        function submitOrder() {
-            let name = document.getElementById('cust-name').value.trim();
-            let phone = document.getElementById('cust-phone').value.trim();
-            let country = document.getElementById('cust-country').value.trim();
-            let city = document.getElementById('cust-city').value.trim();
-            let currentPhone = document.getElementById('admin-phone').value || "9647800680046";
-
-            if(!name || !phone || !country || !city) {
-                alert("يرجى ملء كافة الحقول المطلوبة (الاسم، رقم الهاتف، الدولة، والمحافظة) لضمان إرسال الطلب بدقة!");
-                return;
-            }
-
-            let message = `🚀 *طلب جديد عبر متجر موني مود*:%0A` +
-                          `---------------------------%0A` +
-                          `📦 *الخدمة المطلوبة:* ${selectedProduct}%0A` +
-                          `👤 *اسم الزبون:* ${name}%0A` +
-                          `📱 *رقم الهاتف:* ${phone}%0A` +
-                          `🌍 *الدولة:* ${country}%0A` +
-                          `🏙️ *المحافظة:* ${city}%0A` +
-                          `---------------------------`;
-                          
-            let whatsappURL = `https://wa.me/${currentPhone}?text=${message}`;
-            window.open(whatsappURL, '_blank');
-        }
-
-        renderProducts();
-    </script>
-
-</body>
-</html>
+        function editProduct(index) {
+            let p = products[index];
+            document.getElementById('edit-index').value = index;
+            document.getElementById('new-name').value = p.name;
+            document.getElementById('new-price').value = p.price;
+            document.getElementById('new-duration').value = p.duration || "";
+            document.getElementById('new-img-file').value = "";
+            document.getElementById('admin-panel-title').innerText = "⚙️ تعديل المنتج";
+            document.getElementById('sav
