@@ -5,34 +5,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- معلومات تظهر في بحث جوجل (SEO) -->
-    <title>موني مود ستور : اشتراكات رقمية موثوقة بتفعيل سريع</title>
-    <meta name="description" content="متجر موني مود لبيع الاشتراكات الرقمية الموثوقة والخدمات السريعة بأفضل الأسعار.">
-    <meta name="keywords" content="موني مود, متجر اشتراكات, متجر رقمي, Money Mod Store">
+    <title>موني مود ستور : بوابتك لأرقى الخدمات الرقمية والحلول الذكية</title>
+    <meta name="description" content="اكتشف أسرع وأضمن الخدمات الرقمية في متجر موني مود. أسعار مناسبة وتجربة استثنائية.">
+    <meta name="keywords" content="موني مود, متجر اشتراكات, خدمات رقمية, Money Mod Store">
     
     <link rel="icon" id="site-favicon" href="https://i.imgur.com/7kf5U8N.png">
     
     <!-- Open Graph لظهور الموقع بشكل مرتب في المتصفحات ومحركات البحث -->
-    <meta property="og:title" content="موني مود ستور : اشتراكات رقمية موثوقة">
-    <meta property="og:description" content="متجر موني مود لبيع الاشتراكات الرقمية الموثوقة والخدمات السريعة.">
+    <meta property="og:title" content="موني مود ستور : بوابتك لأرقى الخدمات الرقمية">
+    <meta property="og:description" content="أسرع وأضمن الخدمات الرقمية في متجر موني مود.">
     <meta property="og:image" content="https://i.imgur.com/7kf5U8N.png">
 
     <style>
         body { font-family: Tahoma, sans-serif; background-color: #f0f4f8; margin: 0; padding: 10px; text-align: center; }
         .container { max-width: 600px; margin: 0 auto; padding: 10px; position: relative; }
         
-        #become-admin-link {
+        /* زر القائمة الجانبية (الثلاث خطوط) */
+        #menu-toggle-btn {
             position: absolute;
-            top: 5px;
+            top: 10px;
             left: 10px;
-            font-size: 11px;
-            color: #7f8c8d;
+            font-size: 20px;
+            color: #2c3e50;
             cursor: pointer;
-            background: #e2e8f0;
-            padding: 4px 8px;
-            border-radius: 6px;
+            background: #fff;
+            padding: 6px 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             font-weight: bold;
+            z-index: 100;
         }
-        #become-admin-link:hover { background: #cbd5e1; color: #2c3e50; }
+        #menu-toggle-btn:hover { background: #e2e8f0; }
+
+        /* القائمة الجانبية السحب (Sidebar) */
+        #sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 2000;
+            top: 0;
+            left: 0;
+            background-color: #fff;
+            overflow-x: hidden;
+            transition: 0.3s;
+            padding-top: 60px;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            text-align: right;
+        }
+        #sidebar a {
+            padding: 12px 20px;
+            text-decoration: none;
+            font-size: 15px;
+            color: #2c3e50;
+            display: block;
+            transition: 0.3s;
+            border-bottom: 1px solid #f1f1f1;
+            cursor: pointer;
+        }
+        #sidebar a:hover { background-color: #f8fafc; color: #2980b9; }
+        #sidebar .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 22px;
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+
+        /* شريط البحث */
+        .search-box {
+            margin: 15px 0;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            font-size: 14px;
+            outline: none;
+            background: #fff;
+            box-sizing: border-box;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
 
         .products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; margin-bottom: 20px; }
         
@@ -53,10 +108,11 @@
         .delete-btn { background-color: #e74c3c; color: white; border: none; padding: 5px; width: 100%; border-radius: 6px; font-size: 11px; cursor: pointer; margin-top: 5px; display: none; }
 
         .order-box { background: #fff; border-radius: 16px; padding: 15px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 2px solid #3498db; text-align: right; }
-        input { width: 100%; padding: 10px; margin: 6px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .order-box input { width: 100%; padding: 10px; margin: 6px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
         
         .admin-section { display: none; background: #fff; padding: 15px; border-radius: 16px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 2px dashed #3498db; text-align: right; }
-        
+        .admin-section input { width: 100%; padding: 10px; margin: 6px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+
         #floating-admin-btn {
             display: none;
             position: fixed;
@@ -82,40 +138,55 @@
 </head>
 <body>
 
-    <div class="container">
-        <span id="become-admin-link" onclick="registerAdminFlow()">تسجيل المدير ⚙️</span>
+    <!-- زر الثلاث خطوط للقائمة الجانبية -->
+    <div id="menu-toggle-btn" onclick="toggleSidebar()">☰</div>
 
-        <div style="margin-top: 15px; margin-bottom: 15px;">
-            <h2 style="color: #2c3e50; margin: 0; font-size: 24px;">🛍️ موني مود ستور</h2>
+    <!-- القائمة الجانبية (Sidebar) -->
+    <div id="sidebar">
+        <button class="close-btn" onclick="toggleSidebar()">✕</button>
+        <h3 style="padding: 0 20px; color: #2c3e50; margin-bottom: 15px;">⚙️ الإعدادات</h3>
+        <a onclick="toggleSidebar(); registerAdminFlow()" id="sidebar-admin-link">🔑 تسجيل دخول المدير</a>
+        <a onclick="toggleSidebar(); requestNotifications()">🔔 تفعيل التنبيهات</a>
+        <a onclick="toggleSidebar(); logoutAdmin()" id="sidebar-logout-link" style="color: #e74c3c; display: none;">🚪 تسجيل خروج المدير</a>
+    </div>
+
+    <div class="container">
+        <div style="margin-top: 25px; margin-bottom: 15px;">
+            <h2 style="color: #2c3e50; margin: 0; font-size: 24px;">🚀 موني مود ستور</h2>
             <span style="color: #e67e22; font-size: 13px; font-weight: bold; letter-spacing: 2px;">MONEY MOD STORE</span>
         </div>
-        <p style="color: #7f8c8d; font-size: 13px; margin-bottom: 20px;">اشتراكات رقمية موثوقة بتفعيل سريع</p>
+        <p style="color: #7f8c8d; font-size: 13px; margin-bottom: 15px;">عالمك الأسهل للحصول على أفضل الخدمات الرقمية فوراً</p>
+
+        <!-- شريط البحث -->
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="🔍 شنو الخدمة أو المنتج اللي تبحث عنه؟..." oninput="filterProducts()">
+        </div>
 
         <div id="products-list" class="products-grid"></div>
 
         <!-- نموذج إتمام الطلب -->
         <div id="order-form-container" class="order-box hidden">
-            <h3 id="selected-product-name" style="color: #2980b9; text-align: center; margin-top: 0;">إتمام الطلب</h3>
+            <h3 id="selected-product-name" style="color: #2980b9; text-align: center; margin-top: 0;">تثبيت الطلب</h3>
             
-            <label style="font-size: 12px; font-weight: bold;">اسمك الكامل:</label>
-            <input type="text" id="cust-name" placeholder="أدخل اسمك هنا">
+            <label style="font-size: 12px; font-weight: bold;">اسمك الكريم:</label>
+            <input type="text" id="cust-name" placeholder="اكتب اسمك هنا">
             
-            <label style="font-size: 12px; font-weight: bold;">رقم هاتفـك:</label>
-            <input type="tel" id="cust-phone" placeholder="أدخل رقمك هنا">
+            <label style="font-size: 12px; font-weight: bold;">رقم الواتساب للتواصل:</label>
+            <input type="tel" id="cust-phone" placeholder="اكتب رقمك هنا">
 
             <label style="font-size: 12px; font-weight: bold;">الدولة:</label>
             <input type="text" id="cust-country" placeholder="مثلاً: العراق">
 
-            <label style="font-size: 12px; font-weight: bold;">المحافظة / المدينة:</label>
+            <label style="font-size: 12px; font-weight: bold;">المدينة / المحافظة:</label>
             <input type="text" id="cust-city" placeholder="مثلاً: بغداد">
 
-            <button class="buy-btn" onclick="submitOrder()" style="margin-top: 10px; font-size: 14px; background-color: #25D366;">إرسال الطلب عبر الواتساب 🟢</button>
-            <button onclick="cancelOrder()" style="background-color: #95a5a6; color: white; border: none; padding: 8px; width: 100%; border-radius: 8px; margin-top: 5px; cursor: pointer;">إلغاء</button>
+            <button class="buy-btn" onclick="submitOrder()" style="margin-top: 10px; font-size: 14px; background-color: #25D366;">إرسال تفاصيل الطلب للواتساب 🟢</button>
+            <button onclick="cancelOrder()" style="background-color: #95a5a6; color: white; border: none; padding: 8px; width: 100%; border-radius: 8px; margin-top: 5px; cursor: pointer;">رجوع</button>
         </div>
 
         <div id="admin-panel" class="admin-section">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h4 style="color: #2980b9; margin: 0;">⚙️ لوحة إدارة المتجر</h4>
+                <h4 style="color: #2980b9; margin: 0;">⚙️ لوحة تحكم المتجر</h4>
                 <button onclick="closeAdminPanel()" style="background: #e74c3c; width: auto; padding: 5px 10px; font-size: 12px; border:none; color:white; border-radius:5px; cursor:pointer;">إغلاق</button>
             </div>
             <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
@@ -124,19 +195,19 @@
             <input type="text" id="admin-phone" placeholder="مثلاً: 9647800000000" oninput="savePhone()" style="background: #f9f9f9;">
             <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
 
-            <input type="text" id="new-name" placeholder="اسم المنتج (مثلاً: اشتراك برو)">
-            <input type="text" id="new-price" placeholder="سعر المنتج (مثلاً: 15 ألف)">
-            <input type="text" id="new-duration" placeholder="مدة المنتج (اختياري - مثلاً: 18 شهر)">
-            <input type="text" id="new-img-url" placeholder="رابط صورة المنتج (رابط مباشر للصورة)">
+            <input type="text" id="new-name" placeholder="عنوان الخدمة أو المنتج">
+            <input type="text" id="new-price" placeholder="السعر (مثلاً: 15 ألف)">
+            <input type="text" id="new-duration" placeholder="المدة أو التفاصيل (اختياري)">
+            <input type="text" id="new-img-url" placeholder="رابط صورة المنتج المباشر">
 
-            <button class="buy-btn" onclick="addProduct()" style="background-color: #2980b9; margin-top: 10px;">➕ إضافة ونشر المنتج</button>
+            <button class="buy-btn" onclick="addProduct()" style="background-color: #2980b9; margin-top: 10px;">➕ نشر المنتج الجديد</button>
         </div>
     </div>
 
     <div id="floating-admin-btn" onclick="toggleAdminPanel()">+</div>
 
     <script>
-        const ADMIN_SECRET_CODE = "jojo2026"; 
+        const ADMIN_SECRET_CODE = "2026"; 
 
         const defaultProducts = [
             {
@@ -164,13 +235,35 @@
             activateAdminMode();
         }
 
+        function toggleSidebar() {
+            let sidebar = document.getElementById('sidebar');
+            if (sidebar.style.width === '250px') {
+                sidebar.style.width = '0';
+            } else {
+                sidebar.style.width = '250px';
+            }
+        }
+
+        function requestNotifications() {
+            if (!("Notification" in window)) {
+                alert("متصفحك لا يدعم خاصية التنبيهات.");
+                return;
+            }
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    alert("تم تفعيل التنبيهات بنجاح!");
+                } else {
+                    alert("تم رفض إذن التنبيهات.");
+                }
+            });
+        }
+
         function registerAdminFlow() {
             if (isRegisteredAdmin) {
                 toggleAdminPanel();
                 return;
             }
 
-            // تعديل طلب المدير ليطالب بكلمة السر فوراً مثل ما طلبتِ
             let secret = prompt("أدخل كلمة السر الخاصة بصلاحيات الإدارة:");
             if (secret !== ADMIN_SECRET_CODE) {
                 alert("كلمة السر غير صحيحة!");
@@ -180,12 +273,26 @@
             localStorage.setItem('store_is_admin', 'true');
             isRegisteredAdmin = true;
             activateAdminMode();
-            alert("تم تسجيل الدخول كمديرة بنجاح!");
+            alert("أهلاً بكِ في لوحة الإدارة!");
+        }
+
+        function logoutAdmin() {
+            if (confirm("هل تريدين فعلاً تسجيل الخروج من الإدارة؟")) {
+                localStorage.setItem('store_is_admin', 'false');
+                isRegisteredAdmin = false;
+                document.getElementById('floating-admin-btn').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'none';
+                document.getElementById('sidebar-admin-link').innerText = "🔑 تسجيل دخول المدير";
+                document.getElementById('sidebar-logout-link').style.display = 'none';
+                renderProducts();
+                alert("تم تسجيل الخروج بنجاح.");
+            }
         }
 
         function activateAdminMode() {
             document.getElementById('floating-admin-btn').style.display = 'block';
-            document.getElementById('become-admin-link').innerText = "⚙️ لوحة الإدارة";
+            document.getElementById('sidebar-admin-link').innerText = "⚙️ لوحة الإدارة";
+            document.getElementById('sidebar-logout-link').style.display = 'block';
             renderProducts();
         }
 
@@ -203,31 +310,34 @@
             localStorage.setItem('store_target_phone', phoneVal);
         }
 
-        function renderProducts() {
+        function renderProducts(filterText = "") {
             let list = document.getElementById('products-list');
-            if (products.length === 0) {
-                list.innerHTML = `<p style="grid-column: span 2; color: #888; font-size: 13px; text-align: center;">لا توجد منتجات مضافة حالياً.</p>`;
+            let filtered = products.filter(p => p.name.toLowerCase().includes(filterText.toLowerCase()));
+
+            if (filtered.length === 0) {
+                list.innerHTML = `<p style="grid-column: span 2; color: #888; font-size: 13px; text-align: center;">عذراً، لا توجد نتائج مطابقة لبحثك.</p>`;
                 return;
             }
             list.innerHTML = "";
-            products.forEach((p, index) => {
-                let deleteBtnHtml = isRegisteredAdmin ? `<button class="delete-btn" style="display:block;" onclick="deleteProduct(${index})">حذف المنتج</button>` : '';
+            filtered.forEach((p, index) => {
+                let originalIndex = products.indexOf(p);
+                let deleteBtnHtml = isRegisteredAdmin ? `<button class="delete-btn" style="display:block;" onclick="deleteProduct(${originalIndex})">حذف الخدمة</button>` : '';
                 
                 let durationHtml = p.duration ? `
                     <div class="product-info-box">
                         <div class="info-col">
-                            <span class="info-label">مدة المنتج:</span>
+                            <span class="info-label">المدة / التفاصيل:</span>
                             <span class="info-val duration">${p.duration}</span>
                         </div>
                         <div class="info-col">
-                            <span class="info-label">سعر المنتج:</span>
+                            <span class="info-label">السعر:</span>
                             <span class="info-val">${p.price}</span>
                         </div>
                     </div>
                 ` : `
                     <div class="product-info-box" style="justify-content: center;">
                         <div class="info-col" style="border:none;">
-                            <span class="info-label">سعر المنتج:</span>
+                            <span class="info-label">السعر:</span>
                             <span class="info-val" style="font-size: 15px;">${p.price}</span>
                         </div>
                     </div>
@@ -241,12 +351,17 @@
                             ${durationHtml}
                         </div>
                         <div>
-                            <button class="buy-btn" onclick="openOrderForm('${p.name}')">طلب المنتج</button>
+                            <button class="buy-btn" onclick="openOrderForm('${p.name}')">اطلب الآن</button>
                             ${deleteBtnHtml}
                         </div>
                     </div>
                 `;
             });
+        }
+
+        function filterProducts() {
+            let query = document.getElementById('search-input').value;
+            renderProducts(query);
         }
 
         function addProduct() {
@@ -256,7 +371,7 @@
             let imgUrl = document.getElementById('new-img-url').value;
 
             if(!name || !price) {
-                alert("يرجى ملء اسم المنتج والسعر على الأقل!");
+                alert("يرجى كتابة عنوان الخدمة والسعر أولاً!");
                 return;
             }
 
@@ -272,11 +387,11 @@
             
             renderProducts();
             document.getElementById('admin-panel').style.display = 'none';
-            alert("تم إضافة المنتج بنجاح!");
+            alert("تم إضافة المنتج ونشره بنجاح!");
         }
 
         function deleteProduct(index) {
-            if(confirm("هل أنت متأكد من حذف هذا المنتج؟")) {
+            if(confirm("هل متأكد من حذف هذا المنتج نهائياً؟")) {
                 products.splice(index, 1);
                 localStorage.setItem('store_products', JSON.stringify(products));
                 renderProducts();
@@ -285,7 +400,7 @@
 
         function openOrderForm(productName) {
             selectedProduct = productName;
-            document.getElementById('selected-product-name').innerText = "طلب: " + productName;
+            document.getElementById('selected-product-name').innerText = "طلب خدمة: " + productName;
             document.getElementById('order-form-container').classList.remove('hidden');
             window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
         }
@@ -302,13 +417,13 @@
             let currentPhone = document.getElementById('admin-phone').value || "9647800680046";
 
             if(!name || !phone || !country || !city) {
-                alert("يرجى تعبئة كافة الحقول (الاسم، رقم الهاتف، الدولة، والمحافظة) لكي يتم إرسال الطلب بدقة!");
+                alert("يرجى ملء كافة الحقول المطلوبة (الاسم، رقم الهاتف، الدولة، والمحافظة) لضمان إرسال الطلب بدقة!");
                 return;
             }
 
-            let message = `🛒 *طلب جديد من متجر موني مود*:%0A` +
+            let message = `🚀 *طلب جديد عبر متجر موني مود*:%0A` +
                           `---------------------------%0A` +
-                          `📦 *المنتج:* ${selectedProduct}%0A` +
+                          `📦 *الخدمة المطلوبة:* ${selectedProduct}%0A` +
                           `👤 *اسم الزبون:* ${name}%0A` +
                           `📱 *رقم الهاتف:* ${phone}%0A` +
                           `🌍 *الدولة:* ${country}%0A` +
