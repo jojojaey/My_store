@@ -30,7 +30,7 @@
         .product-card img { width: 100px; height: 100px; object-fit: cover; border-radius: 14px; margin: 0 auto 10px auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
         .product-title { font-size: 15px; font-weight: bold; color: #2c3e50; margin-bottom: 8px; min-height: 35px; display: flex; align-items: center; justify-content: center; }
         
-        /* تقسيم السعر والمدة حسب الرسمة */
+        /* تقسيم السعر والمدة */
         .product-info-box { display: flex; border-top: 1px solid #eee; padding-top: 8px; margin-bottom: 10px; }
         .info-col { flex: 1; text-align: center; }
         .info-col:first-child { border-left: 1px solid #eee; }
@@ -129,10 +129,25 @@
     <div id="floating-admin-btn" onclick="toggleAdminPanel()">+</div>
 
     <script>
-        // كلمة السر الخاصة بالمدراء (يمكنك تغييرها هنا بين القوسين إن أردتِ)
         const ADMIN_SECRET_CODE = "jojo2026"; 
 
-        let products = JSON.parse(localStorage.getItem('store_products')) || [];
+        // المنتجات الثابتة المدمجة بالبرمجة لكي تظهر لكل الزبائن وللمتصفح الخفي تلقائياً
+        const defaultProducts = [
+            {
+                name: "جيماني برو",
+                price: "15 ألف",
+                duration: "18 شهر",
+                img: "https://i.imgur.com/7kf5U8N.png"
+            },
+            {
+                name: "موني مود ستور",
+                price: "1",
+                duration: "",
+                img: "https://i.imgur.com/7kf5U8N.png"
+            }
+        ];
+
+        let products = JSON.parse(localStorage.getItem('store_products')) || defaultProducts;
         let savedPhone = localStorage.getItem('store_target_phone') || "9647800680046";
         document.getElementById('admin-phone').value = savedPhone;
 
@@ -159,7 +174,6 @@
             let city = prompt("ما هي محافظتكِ؟");
             if (!city) return;
             
-            // طلب كلمة السر السرية لضمان عدم دخول أي شخص غريب
             let secret = prompt("أدخل كلمة السر الخاصة بصلاحيات الإدارة:");
             if (secret !== ADMIN_SECRET_CODE) {
                 alert("كلمة السر غير صحيحة! لا يمكنك الحصول على صلاحيات الإدارة.");
@@ -172,7 +186,7 @@
                 localStorage.setItem('admin_details', JSON.stringify({ phone, country, city }));
                 isRegisteredAdmin = true;
                 activateAdminMode();
-                alert("تم تسجيلكِ كمديرة بنجاح تام! ستظهر لكِ دائرة الزائد (+) أسفل الشاشة لإضافة المنتجات وتحويل الطلبات لرقمكِ مباشرة.");
+                alert("تم تسجيلكِ كمديرة بنجاح تام!");
             } else {
                 alert("لم يتم إتمام التسجيل بشكل صحيح.");
             }
@@ -287,7 +301,7 @@
             
             renderProducts();
             document.getElementById('admin-panel').style.display = 'none';
-            alert("تم إضافة ونشر المنتج بنجاح!");
+            alert("تم إضافة المنتج بنجاح!");
         }
 
         function deleteProduct(index) {
