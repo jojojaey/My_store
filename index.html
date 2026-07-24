@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر الاشتراكات الرقمية</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; text-align: center; }
+        .container { max-width: 400px; background: white; margin: 30px auto; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { color: #333; }
+        input, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        button { background-color: #25D366; color: white; border: none; padding: 12px; width: 100%; border-radius: 5px; font-size: 16px; cursor: pointer; font-weight: bold; }
+        button:hover { background-color: #1ebe5d; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>متجر الاشتراكات</h2>
+        <p>املأ البيانات أدناه لإتمام طلبك عبر الواتساب</p>
+        
+        <form id="orderForm">
+            <input type="text" id="name" placeholder="اسمك الكامل" required>
+            <input type="tel" id="phone" placeholder="رقم هاتفك" required>
+            
+            <select id="service">
+                <option value="اشتراك شهري">اشتراك شهري</option>
+                <option value="اشتراك سنوي">اشتراك سنوي</option>
+            </select>
+            
+            <button type="button" onclick="sendToWhatsApp()">إتمام الطلب عبر الواتساب</button>
+        </form>
+    </div>
+
+    <script>
+        function sendToWhatsApp() {
+            // استبدلي هذا الرقم برقم الشخص الثاني (مع رمز الدولة، مثلاً 964...)
+            let targetPhone = "07800680046"; 
+            
+            let name = document.getElementById('name').value;
+            let phone = document.getElementById('phone').value;
+            let service = document.getElementById('service').value;
+            
+            if(!name || !phone) {
+                alert("يرجى ملء جميع الحقول!");
+                return;
+            }
+            
+            let message = `مرحباً، أريد طلب اشتراك جديد:%0A- الاسم: ${name}%0A- الهاتف: ${phone}%0A- نوع الاشتراك: ${service}`;
+            
+            let whatsappURL = `https://wa.me/${targetPhone}?text=${message}`;
+            window.open(whatsappURL, '_blank');
+        }
+    </script>
+
+</body>
+</html>
