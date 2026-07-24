@@ -5,18 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>متجر الاشتراكات الرقمية</title>
     <style>
-        body { font-family: Tahoma, sans-serif; background-color: #f8f9fa; margin: 0; padding: 20px; text-align: center; }
-        .container { max-width: 500px; background: white; margin: 20px auto; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h2 { color: #333; }
-        .product-card { background: #fff; border: 1px solid #ddd; border-radius: 10px; padding: 15px; margin: 15px 0; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .product-card img { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
-        .product-title { font-size: 18px; font-weight: bold; color: #2c3e50; }
-        .product-price { color: #27ae60; font-weight: bold; margin: 5px 0 10px 0; }
-        input, select { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        button { background-color: #25D366; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; font-size: 15px; cursor: pointer; font-weight: bold; }
-        button:hover { background-color: #1ebe5d; }
-        .admin-section { background: #f1f2f6; padding: 15px; border-radius: 10px; margin-top: 30px; border: 2px dashed #ced6e0; text-align: right; }
-        .admin-toggle { background: #718093; margin-bottom: 10px; }
+        body { font-family: Tahoma, sans-serif; background-color: #f0f4f8; margin: 0; padding: 10px; text-align: center; }
+        .container { max-width: 600px; margin: 0 auto; padding: 10px; }
+        h2 { color: #2c3e50; margin-bottom: 5px; }
+        p.subtitle { color: #7f8c8d; font-size: 14px; margin-bottom: 20px; }
+        
+        .products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        
+        .product-card { background: #fff; border-radius: 16px; padding: 12px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #eaeaea; }
+        .product-card img { width: 90px; height: 90px; object-fit: cover; border-radius: 14px; margin: 0 auto 10px auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .product-title { font-size: 15px; font-weight: bold; color: #2c3e50; margin-bottom: 5px; min-height: 40px; display: flex; align-items: center; justify-content: center; }
+        .product-price { color: #27ae60; font-weight: bold; font-size: 14px; margin-bottom: 10px; }
+        
+        .buy-btn { background-color: #25D366; color: white; border: none; padding: 8px; width: 100%; border-radius: 8px; font-size: 13px; cursor: pointer; font-weight: bold; }
+        .buy-btn:hover { background-color: #1ebe5d; }
+        
+        .delete-btn { background-color: #e74c3c; color: white; border: none; padding: 5px; width: 100%; border-radius: 6px; font-size: 11px; cursor: pointer; margin-top: 5px; display: none; }
+
+        .order-box { background: #fff; border-radius: 16px; padding: 15px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 2px solid #3498db; text-align: right; }
+        input { width: 100%; padding: 10px; margin: 6px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        
+        .admin-section { display: none; background: #fff; padding: 15px; border-radius: 16px; margin-top: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 2px dashed #3498db; text-align: right; }
+        .image-upload-btn { display: block; background: #f8f9fa; border: 2px dashed #3498db; color: #3498db; padding: 10px; border-radius: 8px; text-align: center; cursor: pointer; font-weight: bold; margin: 8px 0; font-size: 13px; }
+        
         .hidden { display: none; }
     </style>
 </head>
@@ -24,88 +35,143 @@
 
     <div class="container">
         <h2>🛍️ متجر الاشتراكات الرقمية</h2>
-        <p>اختر الاشتراك المناسب واضغط على إتمام الطلب</p>
+        <p class="subtitle">اختر الاشتراك المناسب واطلب مباشرة</p>
 
-        <!-- قائمة المنتجات التي تظهر للزوار -->
-        <div id="products-list">
-            <!-- المنتجات تضاف هنا تلقائياً -->
-        </div>
+        <!-- شبكة المنتجات (تبدأ فارغة تماماً) -->
+        <div id="products-list" class="products-grid"></div>
 
         <!-- نموذج إتمام الطلب -->
-        <div id="order-form-container" class="hidden product-card" style="background: #e3fafc; border-color: #79c0ff;">
-            <h3 id="selected-product-name">إتمام الطلب</h3>
-            <input type="text" id="cust-name" placeholder="اسمك الكامل" required>
-            <input type="tel" id="cust-phone" placeholder="رقم هاتفك" required>
-            <button onclick="submitOrder()">إتمام الطلب</button>
-            <button onclick="cancelOrder()" style="background-color: #e74c3c; margin-top: 5px;">إلغاء</button>
+        <div id="order-form-container" class="order-box hidden">
+            <h3 id="selected-product-name" style="color: #2980b9; text-align: center; margin-top: 0;">إتمام الطلب</h3>
+            <label style="font-size: 13px; font-weight: bold;">اسمك الكامل:</label>
+            <input type="text" id="cust-name" placeholder="أدخل اسمك هنا">
+            <label style="font-size: 13px; font-weight: bold;">رقم هاتفـك:</label>
+            <input type="tel" id="cust-phone" placeholder="أدخل رقمك هنا">
+            <button class="buy-btn" onclick="submitOrder()" style="margin-top: 10px; font-size: 14px;">إرسال الطلب الآن</button>
+            <button onclick="cancelOrder()" style="background-color: #95a5a6; color: white; border: none; padding: 8px; width: 100%; border-radius: 8px; margin-top: 5px; cursor: pointer;">إلغاء</button>
         </div>
 
-        <!-- لوحة تحكم المسؤولين (إضافة منتج) -->
-        <div class="admin-section">
-            <button class="admin-toggle" onclick="toggleAdmin()">⚙️ لوحة تحكم المسؤولين (إضافة اشتراك)</button>
-            <div id="admin-panel" class="hidden">
-                <h4>إضافة اشتراك جديد للمتجر</h4>
-                <input type="text" id="new-name" placeholder="اسم الاشتراك (مثلاً: Gemini Pro)">
-                <input type="text" id="new-price" placeholder="السعر (مثلاً: 10,000 دينار)">
-                <input type="text" id="new-img" placeholder="رابط صورة الاشتراك (ضع رابط صورة مباشر)">
-                <button onclick="addProduct()" style="background-color: #2980b9;">حفظ ونشر الاشتراك</button>
-            </div>
+        <!-- لوحة تحكم المسؤولين -->
+        <div id="admin-panel" class="admin-section">
+            <h4 style="color: #2980b9; text-align: center; margin-top: 0;">⚙️ لوحة إدارة المتجر والمشرفين</h4>
+            
+            <label style="font-size: 12px; font-weight: bold; color: #555;">رقم واتساب استلام الطلبات:</label>
+            <input type="text" id="admin-phone" placeholder="مثلاً: 9647800000000" oninput="savePhone()" style="background: #f9f9f9;">
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+
+            <input type="text" id="new-name" placeholder="اسم الاشتراك (مثلاً: Gemini Pro)">
+            <input type="text" id="new-price" placeholder="السعر (مثلاً: 15,000 د.ع)">
+            
+            <label class="image-upload-btn">
+                ➕ اضغط لاختيار صورة الاشتراك من المعرض
+                <input type="file" id="new-img-file" accept="image/*" style="display: none;">
+            </label>
+            <div id="file-name-display" style="font-size: 11px; color: #7f8c8d; margin-bottom: 8px; text-align: center;">لم يتم اختيار صورة بعد</div>
+
+            <button class="buy-btn" onclick="addProduct()" style="background-color: #2980b9;">➕ إضافة ونشر الاشتراك</button>
+        </div>
+
+        <!-- زر الدخول المخفي للإدارة في أسفل الصفحة -->
+        <div style="margin-top: 50px; text-align: center;">
+            <span onclick="loginAdmin()" style="color: #d1d8e0; font-size: 12px; cursor: pointer;">⚙️ دخول الإدارة</span>
         </div>
     </div>
 
     <script>
-        // رقم الواتساب الذي ستستقبل الطلبات عليه (استبدليه برقم الشخص الثاني)
-        let targetPhone = "9647724186755"; 
+        // تبدأ القائمة فارغة تماماً بدون منتجات افتراضية
+        let products = JSON.parse(localStorage.getItem('store_products')) || [];
+        let savedPhone = localStorage.getItem('store_target_phone') || "9647800680046";
+        document.getElementById('admin-phone').value = savedPhone;
 
-        // المنتجات الافتراضية إذا كانت القائمة فارغة
-        let defaultProducts = [
-            { name: "اشتراك Gemini Advanced", price: "15,000 د.ع", img: "https://i.imgur.com/7kf5U8N.png" },
-            { name: "اشتراك ChatGPT Plus", price: "20,000 د.ع", img: "https://i.imgur.com/83Z93Xn.png" }
-        ];
-
-        let products = JSON.parse(localStorage.getItem('store_products')) || defaultProducts;
         let selectedProduct = "";
+        let base64Image = "";
+        let isAdmin = false;
+
+        function loginAdmin() {
+            let pass = prompt("الرجاء إدخال كلمة مرور المشرف:");
+            if (pass === "2026") {
+                isAdmin = true;
+                document.getElementById('admin-panel').style.display = 'block';
+                renderProducts();
+                alert("تم تسجيل الدخول بنجاح!");
+            } else {
+                alert("كلمة المرور خاطئة!");
+            }
+        }
+
+        function savePhone() {
+            let phoneVal = document.getElementById('admin-phone').value;
+            localStorage.setItem('store_target_phone', phoneVal);
+        }
+
+        document.getElementById('new-img-file').addEventListener('change', function(e) {
+            let file = e.target.files[0];
+            if (file) {
+                document.getElementById('file-name-display').innerText = "تم اختيار الصورة: " + file.name;
+                let reader = new FileReader();
+                reader.onload = function(event) {
+                    base64Image = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
 
         function renderProducts() {
             let list = document.getElementById('products-list');
+            if (products.length === 0) {
+                list.innerHTML = `<p style="grid-column: span 2; color: #888; font-size: 13px; text-align: center;">لا توجد اشتراكات مضافة حالياً. سجلي دخول الإدارة من أسفل الصفحة لإضافة أول منتج!</p>`;
+                return;
+            }
             list.innerHTML = "";
             products.forEach((p, index) => {
+                let deleteBtnHtml = isAdmin ? `<button class="delete-btn" style="display:block;" onclick="deleteProduct(${index})">حذف المنتج</button>` : '';
+                
                 list.innerHTML += `
                     <div class="product-card">
-                        <img src="${p.img}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/100'">
-                        <div class="product-title">${p.name}</div>
-                        <div class="product-price">${p.price}</div>
-                        <button onclick="openOrderForm('${p.name}')">اختيار وطلب الاشتراك</button>
+                        <div>
+                            <img src="${p.img}" alt="${p.name}">
+                            <div class="product-title">${p.name}</div>
+                            <div class="product-price">${p.price}</div>
+                        </div>
+                        <div>
+                            <button class="buy-btn" onclick="openOrderForm('${p.name}')">طلب الاشتراك</button>
+                            ${deleteBtnHtml}
+                        </div>
                     </div>
                 `;
             });
         }
 
-        function toggleAdmin() {
-            let panel = document.getElementById('admin-panel');
-            panel.classList.toggle('hidden');
-        }
-
         function addProduct() {
             let name = document.getElementById('new-name').value;
             let price = document.getElementById('new-price').value;
-            let img = document.getElementById('new-img').value;
 
             if(!name || !price) {
                 alert("يرجى ملء اسم الاشتراك والسعر على الأقل!");
                 return;
             }
 
-            products.push({ name, price, img: img || 'https://via.placeholder.com/100' });
+            let finalImg = base64Image || 'https://via.placeholder.com/90?text=No+Image';
+
+            products.push({ name, price, img: finalImg });
             localStorage.setItem('store_products', JSON.stringify(products));
             
             document.getElementById('new-name').value = "";
             document.getElementById('new-price').value = "";
-            document.getElementById('new-img').value = "";
+            document.getElementById('new-img-file').value = "";
+            document.getElementById('file-name-display').innerText = "لم يتم اختيار صورة بعد";
+            base64Image = "";
             
             renderProducts();
-            toggleAdmin();
-            alert("تم إضافة الاشتراك بنجاح وأصبح ظاهراً في المتجر!");
+            alert("تم إضافة الاشتراك بنجاح!");
+        }
+
+        function deleteProduct(index) {
+            if(confirm("هل أنت متأكد من حذف هذا الاشتراك؟")) {
+                products.splice(index, 1);
+                localStorage.setItem('store_products', JSON.stringify(products));
+                renderProducts();
+            }
         }
 
         function openOrderForm(productName) {
@@ -122,6 +188,7 @@
         function submitOrder() {
             let name = document.getElementById('cust-name').value;
             let phone = document.getElementById('cust-phone').value;
+            let currentPhone = document.getElementById('admin-phone').value || "9647800680046";
 
             if(!name || !phone) {
                 alert("يرجى إدخال الاسم ورقم الهاتف!");
@@ -129,7 +196,7 @@
             }
 
             let message = `مرحباً، أريد طلب اشتراك:%0A- المنتج: ${selectedProduct}%0A- اسم الزبون: ${name}%0A- رقم الهاتف: ${phone}`;
-            let whatsappURL = `https://wa.me/${targetPhone}?text=${message}`;
+            let whatsappURL = `https://wa.me/${currentPhone}?text=${message}`;
             window.open(whatsappURL, '_blank');
         }
 
