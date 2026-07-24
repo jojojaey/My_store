@@ -9,7 +9,6 @@
         body { font-family: Tahoma, sans-serif; background-color: #f0f4f8; margin: 0; padding: 10px; text-align: center; }
         .container { max-width: 600px; margin: 0 auto; padding: 10px; position: relative; }
         
-        /* زر أريد أصير مدير في أعلى اليسار */
         #become-admin-link {
             position: absolute;
             top: 5px;
@@ -30,7 +29,6 @@
         .product-card img { width: 100px; height: 100px; object-fit: cover; border-radius: 14px; margin: 0 auto 10px auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
         .product-title { font-size: 15px; font-weight: bold; color: #2c3e50; margin-bottom: 8px; min-height: 35px; display: flex; align-items: center; justify-content: center; }
         
-        /* تقسيم السعر والمدة */
         .product-info-box { display: flex; border-top: 1px solid #eee; padding-top: 8px; margin-bottom: 10px; }
         .info-col { flex: 1; text-align: center; }
         .info-col:first-child { border-left: 1px solid #eee; }
@@ -47,7 +45,6 @@
         input { width: 100%; padding: 10px; margin: 6px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
         
         .admin-section { display: none; background: #fff; padding: 15px; border-radius: 16px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 2px dashed #3498db; text-align: right; }
-        .image-upload-btn { display: block; background: #f8f9fa; border: 2px dashed #3498db; color: #3498db; padding: 10px; border-radius: 8px; text-align: center; cursor: pointer; font-weight: bold; margin: 8px 0; font-size: 13px; }
         
         #floating-admin-btn {
             display: none;
@@ -75,20 +72,16 @@
 <body>
 
     <div class="container">
-        <!-- زر أريد أصير مدير بأعلى اليسار -->
         <span id="become-admin-link" onclick="registerAdminFlow()">أريد أصير مدير</span>
 
-        <!-- عنوان الموقع على سطرين -->
         <div style="margin-top: 15px; margin-bottom: 15px;">
             <h2 style="color: #2c3e50; margin: 0; font-size: 24px;">🛍️ موني مود</h2>
             <span style="color: #e67e22; font-size: 13px; font-weight: bold; letter-spacing: 2px;">ســتــور (STORE)</span>
         </div>
         <p style="color: #7f8c8d; font-size: 13px; margin-bottom: 20px;">اختر الاشتراك المناسب واطلب مباشرة</p>
 
-        <!-- شبكة المنتجات -->
         <div id="products-list" class="products-grid"></div>
 
-        <!-- نموذج إتمام الطلب للزبون -->
         <div id="order-form-container" class="order-box hidden">
             <h3 id="selected-product-name" style="color: #2980b9; text-align: center; margin-top: 0;">إتمام الطلب</h3>
             <label style="font-size: 13px; font-weight: bold;">اسمك الكامل:</label>
@@ -99,7 +92,6 @@
             <button onclick="cancelOrder()" style="background-color: #95a5a6; color: white; border: none; padding: 8px; width: 100%; border-radius: 8px; margin-top: 5px; cursor: pointer;">إلغاء</button>
         </div>
 
-        <!-- لوحة تحكم المسؤول -->
         <div id="admin-panel" class="admin-section">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <h4 style="color: #2980b9; margin: 0;">⚙️ لوحة إدارة المتجر</h4>
@@ -114,24 +106,17 @@
             <input type="text" id="new-name" placeholder="اسم المنتج (مثلاً: اشتراك جمبر)">
             <input type="text" id="new-price" placeholder="سعر المنتج (مثلاً: 15 ألف)">
             <input type="text" id="new-duration" placeholder="مدة المنتج (اختياري - مثلاً: 18 شهر)">
-            
-            <label class="image-upload-btn">
-                ➕ اضغط لاختيار صورة المنتج من المعرض
-                <input type="file" id="new-img-file" accept="image/*" style="display: none;">
-            </label>
-            <div id="file-name-display" style="font-size: 11px; color: #7f8c8d; margin-bottom: 8px; text-align: center;">لم يتم اختيار صورة بعد</div>
+            <input type="text" id="new-img-url" placeholder="رابط صورة المنتج (رابط مباشر للصورة)">
 
-            <button class="buy-btn" onclick="addProduct()" style="background-color: #2980b9;">➕ إضافة ونشر المنتج</button>
+            <button class="buy-btn" onclick="addProduct()" style="background-color: #2980b9; margin-top: 10px;">➕ إضافة ونشر المنتج</button>
         </div>
     </div>
 
-    <!-- زر الدائرة العائمة للمدير -->
     <div id="floating-admin-btn" onclick="toggleAdminPanel()">+</div>
 
     <script>
-        const ADMIN_SECRET_CODE = "jojo2026"; 
+        const ADMIN_SECRET_CODE = "2026"; 
 
-        // المنتجات الثابتة المدمجة بالبرمجة لكي تظهر لكل الزبائن وللمتصفح الخفي تلقائياً
         const defaultProducts = [
             {
                 name: "جيماني برو",
@@ -152,8 +137,6 @@
         document.getElementById('admin-phone').value = savedPhone;
 
         let selectedProduct = "";
-        let base64Image = "";
-        
         let isRegisteredAdmin = localStorage.getItem('store_is_admin') === 'true';
 
         if (isRegisteredAdmin) {
@@ -162,7 +145,6 @@
 
         function registerAdminFlow() {
             if (isRegisteredAdmin) {
-                alert("أهلاً بكِ أستاذتي من جديد! أنتِ مسجلة كمديرة لهذا المتجر.");
                 toggleAdminPanel();
                 return;
             }
@@ -176,19 +158,16 @@
             
             let secret = prompt("أدخل كلمة السر الخاصة بصلاحيات الإدارة:");
             if (secret !== ADMIN_SECRET_CODE) {
-                alert("كلمة السر غير صحيحة! لا يمكنك الحصول على صلاحيات الإدارة.");
+                alert("كلمة السر غير صحيحة!");
                 return;
             }
 
             let confirmWord = prompt("اكتبي كلمة ( تم ) لتأكيد التسجيل النهائي للأبد:");
             if (confirmWord && confirmWord.trim() === "تم") {
                 localStorage.setItem('store_is_admin', 'true');
-                localStorage.setItem('admin_details', JSON.stringify({ phone, country, city }));
                 isRegisteredAdmin = true;
                 activateAdminMode();
                 alert("تم تسجيلكِ كمديرة بنجاح تام!");
-            } else {
-                alert("لم يتم إتمام التسجيل بشكل صحيح.");
             }
         }
 
@@ -210,25 +189,6 @@
         function savePhone() {
             let phoneVal = document.getElementById('admin-phone').value;
             localStorage.setItem('store_target_phone', phoneVal);
-        }
-
-        document.getElementById('new-img-file').addEventListener('change', function(e) {
-            let file = e.target.files[0];
-            if (file) {
-                document.getElementById('file-name-display').innerText = "تم اختيار الصورة: " + file.name;
-                let reader = new FileReader();
-                reader.onload = function(event) {
-                    base64Image = event.target.result;
-                    document.getElementById('site-favicon').href = base64Image;
-                    localStorage.setItem('store_favicon', base64Image);
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        let savedFavicon = localStorage.getItem('store_favicon');
-        if (savedFavicon) {
-            document.getElementById('site-favicon').href = savedFavicon;
         }
 
         function renderProducts() {
@@ -281,13 +241,14 @@
             let name = document.getElementById('new-name').value;
             let price = document.getElementById('new-price').value;
             let duration = document.getElementById('new-duration').value;
+            let imgUrl = document.getElementById('new-img-url').value;
 
             if(!name || !price) {
                 alert("يرجى ملء اسم المنتج والسعر على الأقل!");
                 return;
             }
 
-            let finalImg = base64Image || 'https://via.placeholder.com/100?text=No+Image';
+            let finalImg = imgUrl.trim() !== "" ? imgUrl : 'https://i.imgur.com/7kf5U8N.png';
 
             products.push({ name, price, duration, img: finalImg });
             localStorage.setItem('store_products', JSON.stringify(products));
@@ -295,9 +256,7 @@
             document.getElementById('new-name').value = "";
             document.getElementById('new-price').value = "";
             document.getElementById('new-duration').value = "";
-            document.getElementById('new-img-file').value = "";
-            document.getElementById('file-name-display').innerText = "لم يتم اختيار صورة بعد";
-            base64Image = "";
+            document.getElementById('new-img-url').value = "";
             
             renderProducts();
             document.getElementById('admin-panel').style.display = 'none';
@@ -324,7 +283,7 @@
         }
 
         function submitOrder() {
-            let name = document.getElementById('cust-name').value;
+            let name = document.getElementById('cust-name5').value || document.getElementById('cust-name').value;
             let phone = document.getElementById('cust-phone').value;
             let currentPhone = document.getElementById('admin-phone').value || "9647800680046";
 
