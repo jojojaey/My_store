@@ -1,60 +1,449 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">موني مود ستور</title>
-    <link rel="icon" id="site-favicon" href="https://i.imgur.com/kHI9Abj.png">
-    <style>
-        body { font-family: Tahoma, sans-serif; background-color: #f0f4f8; margin: 0; padding: 10px; text-align: center; }
-        .container { max-width: 600px; margin: 0 auto; padding: 10px; position: relative; }
-        .top-nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .top-btn { font-size: 20px; color: #2c3e50; cursor: pointer; background: #fff; padding: 6px 14px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-weight: bold; border: none; }
-        #sidebar { height: 100%; width: 0; position: fixed; z-index: 3000; top: 0; right: 0; background-color: #fff; overflow-x: hidden; transition: 0.3s; padding-top: 60px; box-shadow: -5px 0 15px rgba(0,0,0,0.1); text-align: right; }
-        #sidebar a { padding: 14px 20px; text-decoration: none; font-size: 15px; color: #2c3e50; display: block; transition: 0.3s; border-bottom: 1px solid #f1f1f1; cursor: pointer; font-weight: bold; }
-        #sidebar .close-btn { position: absolute; top: 10px; left: 15px; font-size: 22px; border: none; background: none; cursor: pointer; }
-        .search-box { margin: 15px 0; }
-        .search-box input { width: 100%; padding: 10px 15px; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 14px; outline: none; background: #fff; box-sizing: border-box; }
-        .products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; margin-bottom: 20px; }
-        .product-card { background: #fff; border-radius: 16px; padding: 12px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #eaeaea; }
-        .product-card img { width: 100px; height: 100px; object-fit: cover; border-radius: 14px; margin: 0 auto 10px auto; }
-        .product-title { font-size: 15px; font-weight: bold; color: #2c3e50; margin-bottom: 8px; }
-        .action-btn { background-color: #25D366; color: white; border: none; padding: 8px; width: 100%; border-radius: 8px; font-size: 13px; cursor: pointer; font-weight: bold; margin-top: 4px; }
-        .cart-box, .order-box, .admin-section, .reviews-section { background: #fff; border-radius: 16px; padding: 15px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 2px solid #3498db; text-align: right; }
-        .order-box input, .order-box textarea, .admin-section input, .admin-section select, .reviews-section textarea { width: 100%; padding: 10px; margin: 6px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-family: Tahoma; }
-        #floating-admin-btn { display: none; position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px; background-color: #2980b9; color: white; border-radius: 50%; text-align: center; font-size: 30px; line-height: 58px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; z-index: 1000; font-weight: bold; }
-        .hidden { display: none !important; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="top-nav-bar">
-            <button class="top-btn" onclick="toggleCartModal()">🛒 <span id="cart-badge" style="background:#e74c3c;color:#fff;font-size:10px;padding:2px 6px;border-radius:50%;display:none;">0</span></button>
-            <button class="top-btn" onclick="openSidebar()">☰</button>
-        </div>
-        <div id="sidebar">
-            <button class="close-btn" onclick="closeSidebar()">✕</button>
-            <h3 style="padding: 0 20px; color: #2c3e50;">⚙️ القائمة الرئيسية</h3>
-            <a onclick="closeSidebar(); openSettingsModal()">1️⃣ ⚙️ الإعدادات</a>
-            <a onclick="closeSidebar(); filterCategory('تطبيق')">2️⃣ 📱 التطبيقات</a>
-            <a onclick="closeSidebar(); filterCategory('لعبة')">3️⃣ 🎮 الألعاب</a>
-            <a onclick="closeSidebar(); switchTab('reviews')">4️⃣ 💬 التعليقات</a>
-            <a onclick="closeSidebar(); filterCategory('الكل'); switchTab('home')" style="color: #27ae60;">🏠 الرئيسية</a>
-            <a onclick="closeSidebar(); logoutAdmin()" id="sidebar-logout-link" style="color: #e74c3c; display: none;">🚪 تسجيل خروج</a>
-        </div>
-        <h2 id="header-store-name" style="color: #2c3e50;">موني مود ستور</h2>
-        <div id="main-content-view">
-            <div class="search-box"><input type="text" id="search-input" placeholder="🔍 ابحث هنا..." oninput="filterProducts()"></div>
-            <div id="products-list" class="products-grid"></div>
-        </div>
-        <div id="floating-admin-btn" onclick="openAddMode()">+</div>
-    </div>
+  <!-- مكتبات Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-    <script>
-        // ضع كود الـ JavaScript الخاص بك هنا داخل وسم السكربت
-        console.log("Store Loaded");
-    </script>
-</body>
-</html>
 
+    <script>
+        const ADMIN_SECRET_CODE = "2026";
+
+        // ================== إعداد Firebase ==================
+        const firebaseConfig = {
+            apiKey: "AIzaSyCbi8pOgT_esLFhz6toB206_hHUQeFpll8",
+            authDomain: "money-mod-store.firebaseapp.com",
+            databaseURL: "https://money-mod-store-default-rtdb.firebaseio.com",
+            projectId: "money-mod-store",
+            storageBucket: "money-mod-store.firebasestorage.app",
+            messagingSenderId: "655728816548",
+            appId: "1:655728816548:web:97b1de8923064fc1811131"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // ================== المتغيرات العامة ==================
+        // السلة تبقى محلية على جهاز الزبون نفسه (شي شخصي لكل زائر)
+        let cart = JSON.parse(localStorage.getItem('store_cart')) || [];
+        let isRegisteredAdmin = localStorage.getItem('store_is_admin') === 'true';
+
+        // هذي البيانات تنجلب من Firebase وتكون مشتركة بين كل الزوار
+        let products = [];
+        let reviews = [];
+        let savedPhone = "9647800680046";
+        let storeName = "موني مود ستور";
+        let storeLogo = "https://i.imgur.com/kHI9Abj.png";
+        let currentCategoryFilter = 'الكل';
+
+        if (isRegisteredAdmin) {
+            activateAdminMode();
+        }
+        updateCartBadge();
+
+        // ================== الاستماع الفوري لتغيرات Firebase ==================
+        db.ref('products').on('value', (snapshot) => {
+            const val = snapshot.val();
+            products = val ? Object.values(val) : [];
+            renderProducts();
+        });
+
+        db.ref('reviews').on('value', (snapshot) => {
+            const val = snapshot.val();
+            reviews = val ? Object.values(val) : [];
+            renderReviews();
+        });
+
+        db.ref('settings').on('value', (snapshot) => {
+            const s = snapshot.val() || {};
+            if (s.storeName) storeName = s.storeName;
+            if (s.storeLogo) storeLogo = s.storeLogo;
+            if (s.targetPhone) savedPhone = s.targetPhone;
+
+            document.getElementById('admin-phone').value = savedPhone;
+            document.getElementById('setting-store-name').value = storeName;
+            updateStoreBranding();
+        });
+
+        // ================== دوال القائمة الجانبية ==================
+        function openSidebar() {
+            document.getElementById('sidebar').style.width = '250px';
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').style.width = '0';
+        }
+
+        function switchTab(tabName) {
+            document.getElementById('main-content-view').classList.add('hidden');
+            document.getElementById('cart-section').classList.add('hidden');
+            document.getElementById('reviews-section').classList.add('hidden');
+            document.getElementById('admin-panel').classList.add('hidden');
+
+            if (tabName === 'home') {
+                document.getElementById('main-content-view').classList.remove('hidden');
+                renderProducts();
+            } else if (tabName === 'reviews') {
+                document.getElementById('reviews-section').classList.remove('hidden');
+                renderReviews();
+            }
+        }
+
+        function openSettingsModal() {
+            document.getElementById('settings-modal').classList.remove('hidden');
+            if (isRegisteredAdmin) {
+                document.getElementById('admin-login-area').classList.add('hidden');
+                document.getElementById('admin-settings-area').classList.remove('hidden');
+            } else {
+                document.getElementById('admin-login-area').classList.remove('hidden');
+                document.getElementById('admin-settings-area').classList.add('hidden');
+            }
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('settings-modal').classList.add('hidden');
+        }
+
+        function verifyAdminLogin() {
+            let pass = document.getElementById('admin-pass-input').value;
+            if (pass !== ADMIN_SECRET_CODE) {
+                alert("كلمة السر غير صحيحة!");
+                return;
+            }
+            localStorage.setItem('store_is_admin', 'true');
+            isRegisteredAdmin = true;
+            activateAdminMode();
+            openSettingsModal();
+            alert("تم تسجيل الدخول كمدير بنجاح!");
+        }
+
+        function logoutAdmin() {
+            if (confirm("هل تريد تسجيل الخروج من حساب المدير؟")) {
+                localStorage.setItem('store_is_admin', 'false');
+                isRegisteredAdmin = false;
+                document.getElementById('floating-admin-btn').style.display = 'none';
+                document.getElementById('admin-panel').classList.add('hidden');
+                document.getElementById('sidebar-logout-link').style.display = 'none';
+                closeSettingsModal();
+                renderProducts();
+                alert("تم تسجيل الخروج بنجاح.");
+            }
+        }
+
+        function activateAdminMode() {
+            document.getElementById('floating-admin-btn').style.display = 'block';
+            document.getElementById('sidebar-logout-link').style.display = 'block';
+            renderProducts();
+        }
+
+        function updateStoreBranding() {
+            document.getElementById('header-store-name').innerText = storeName;
+            document.getElementById('page-title').innerText = storeName + " : المتجر الرقمي";
+            document.getElementById('header-logo').src = storeLogo;
+            document.getElementById('site-favicon').href = storeLogo;
+        }
+
+        function saveStoreSettings() {
+            let newName = document.getElementById('setting-store-name').value.trim();
+            let fileInput = document.getElementById('setting-logo-file');
+
+            function pushSettings(logoData) {
+                const updates = {};
+                if (newName) updates.storeName = newName;
+                if (logoData) updates.storeLogo = logoData;
+                db.ref('settings').update(updates).then(() => {
+                    closeSettingsModal();
+                    alert("تم حفظ إعدادات المتجر بنجاح!");
+                });
+            }
+
+            if (fileInput.files && fileInput.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function(e) { pushSettings(e.target.result); };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                pushSettings(null);
+            }
+        }
+
+        // ================== أدوات مساعدة ==================
+        function escapeHtml(str) {
+            if (str === undefined || str === null) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function saveCart() { localStorage.setItem('store_cart', JSON.stringify(cart)); }
+
+        function savePhone() {
+            const phone = document.getElementById('admin-phone').value.trim();
+            if (!phone) return;
+            savedPhone = phone;
+            db.ref('settings/targetPhone').set(phone);
+        }
+
+        // ================== المنتجات ==================
+        function filterCategory(cat) {
+            currentCategoryFilter = cat;
+            renderProducts();
+        }
+
+        function filterProducts() {
+            renderProducts();
+        }
+
+        function renderProducts() {
+            const container = document.getElementById('products-list');
+            const searchTerm = document.getElementById('search-input').value.trim().toLowerCase();
+            container.innerHTML = '';
+
+            const filtered = products.filter(p => {
+                const matchesCategory = currentCategoryFilter === 'الكل' || p.category === currentCategoryFilter;
+                const matchesSearch = !searchTerm || (p.name || '').toLowerCase().includes(searchTerm);
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<p style="grid-column: 1 / -1; color:#999;">لا توجد منتجات مطابقة حالياً.</p>';
+                return;
+            }
+
+            filtered.forEach((p) => {
+                const realIndex = products.indexOf(p);
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div>
+                        <img src="${escapeHtml(p.img || 'https://i.imgur.com/kHI9Abj.png')}" alt="${escapeHtml(p.name)}">
+                        <div class="product-title">${escapeHtml(p.name)}</div>
+                        <div class="product-info-box">
+                            <div class="info-col">
+                                <span class="info-label">السعر</span>
+                                <span class="info-val">${escapeHtml(p.price)}$</span>
+                            </div>
+                            <div class="info-col">
+                                <span class="info-label">المدة</span>
+                                <span class="info-val duration">${escapeHtml(p.duration || '-')}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="action-btn" onclick="addToCart(${realIndex})">🛒 أضف للسلة</button>
+                        <div class="admin-action-row">
+                            <button class="edit-btn" style="display:${isRegisteredAdmin ? 'block' : 'none'};" onclick="openEditMode(${realIndex})">✏️ تعديل</button>
+                            <button class="delete-btn" style="display:${isRegisteredAdmin ? 'block' : 'none'};" onclick="deleteProduct(${realIndex})">🗑️ حذف</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function openAddMode() {
+            document.getElementById('edit-index').value = '-1';
+            document.getElementById('admin-panel-title').innerText = '⚙️ إضافة منتج جديد';
+            document.getElementById('save-product-btn').innerText = '➕ نشر المنتج الجديد';
+            document.getElementById('new-name').value = '';
+            document.getElementById('new-price').value = '';
+            document.getElementById('new-duration').value = '';
+            document.getElementById('new-category').value = 'تطبيق';
+            document.getElementById('new-img-file').value = '';
+
+            document.getElementById('main-content-view').classList.add('hidden');
+            document.getElementById('cart-section').classList.add('hidden');
+            document.getElementById('reviews-section').classList.add('hidden');
+            document.getElementById('admin-panel').classList.remove('hidden');
+        }
+
+        function openEditMode(index) {
+            const p = products[index];
+            if (!p) return;
+            document.getElementById('edit-index').value = index;
+            document.getElementById('admin-panel-title').innerText = '✏️ تعديل المنتج';
+            document.getElementById('save-product-btn').innerText = '💾 حفظ التعديلات';
+            document.getElementById('new-name').value = p.name;
+            document.getElementById('new-price').value = p.price;
+            document.getElementById('new-duration').value = p.duration || '';
+            document.getElementById('new-category').value = p.category;
+            document.getElementById('new-img-file').value = '';
+
+            document.getElementById('main-content-view').classList.add('hidden');
+            document.getElementById('cart-section').classList.add('hidden');
+            document.getElementById('reviews-section').classList.add('hidden');
+            document.getElementById('admin-panel').classList.remove('hidden');
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('admin-panel').classList.add('hidden');
+            document.getElementById('main-content-view').classList.remove('hidden');
+            renderProducts();
+        }
+
+        function saveProduct() {
+            const name = document.getElementById('new-name').value.trim();
+            const price = document.getElementById('new-price').value.trim();
+            const duration = document.getElementById('new-duration').value.trim();
+            const category = document.getElementById('new-category').value;
+            const editIndex = parseInt(document.getElementById('edit-index').value, 10);
+            const fileInput = document.getElementById('new-img-file');
+
+            if (!name || !price) {
+                alert('يرجى إدخال اسم المنتج والسعر على الأقل.');
+                return;
+            }
+
+            function finalizeSave(imgData) {
+                let updatedProducts = products.slice();
+                if (editIndex >= 0 && updatedProducts[editIndex]) {
+                    updatedProducts[editIndex] = {
+                        ...updatedProducts[editIndex],
+                        name, price, duration, category,
+                        img: imgData || updatedProducts[editIndex].img
+                    };
+                } else {
+                    updatedProducts.push({ name, price, duration, category, img: imgData || 'https://i.imgur.com/kHI9Abj.png' });
+                }
+                db.ref('products').set(updatedProducts).then(() => {
+                    closeAdminPanel();
+                    alert('تم حفظ المنتج بنجاح!');
+                });
+            }
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) { finalizeSave(e.target.result); };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                finalizeSave(null);
+            }
+        }
+
+        function deleteProduct(index) {
+            if (confirm('هل أنت متأكد من حذف هذا المنتج؟')) {
+                let updatedProducts = products.slice();
+                updatedProducts.splice(index, 1);
+                db.ref('products').set(updatedProducts);
+            }
+        }
+
+        // ================== السلة (محلية لكل زبون) ==================
+        function addToCart(index) {
+            const p = products[index];
+            if (!p) return;
+            const existing = cart.find(item => item.name === p.name);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ name: p.name, price: p.price, img: p.img, qty: 1 });
+            }
+            saveCart();
+            updateCartBadge();
+            alert('تمت إضافة المنتج للسلة 🛒');
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            saveCart();
+            updateCartBadge();
+            renderCart();
+        }
+
+        function changeQty(index, delta) {
+            if (!cart[index]) return;
+            cart[index].qty += delta;
+            if (cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            }
+            saveCart();
+            updateCartBadge();
+            renderCart();
+        }
+
+        function getCartTotal() {
+            return cart.reduce((sum, item) => sum + (parseFloat(item.price) || 0) * item.qty, 0);
+        }
+
+        function updateCartBadge() {
+            const badge = document.getElementById('cart-badge');
+            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+            if (totalQty > 0) {
+                badge.style.display = 'block';
+                badge.innerText = totalQty;
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items-container');
+            container.innerHTML = '';
+
+            if (cart.length === 0) {
+                container.innerHTML = '<p style="color:#999; text-align:center;">السلة فارغة حالياً.</p>';
+            } else {
+                cart.forEach((item, index) => {
+                    const row = document.createElement('div');
+                    row.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #f1f1f1;';
+                    row.innerHTML = `
+                        <div style="flex:1;">
+                            <div style="font-weight:bold; font-size:13px;">${escapeHtml(item.name)}</div>
+                            <div style="font-size:12px; color:#27ae60;">${escapeHtml(item.price)}$ × ${item.qty}</div>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:5px;">
+                            <button onclick="changeQty(${index}, -1)" style="width:24px; height:24px; border:none; border-radius:5px; background:#eee; cursor:pointer;">-</button>
+                            <span>${item.qty}</span>
+                            <button onclick="changeQty(${index}, 1)" style="width:24px; height:24px; border:none; border-radius:5px; background:#eee; cursor:pointer;">+</button>
+                            <button onclick="removeFromCart(${index})" style="border:none; background:#e74c3c; color:#fff; border-radius:5px; padding:4px 8px; cursor:pointer; font-size:11px;">حذف</button>
+                        </div>
+                    `;
+                    container.appendChild(row);
+                });
+            }
+
+            document.getElementById('cart-total-price').innerText = 'المجموع الكلي: ' + getCartTotal() + '$';
+        }
+
+        function toggleCartModal() {
+            const cartSection = document.getElementById('cart-section');
+            const isHidden = cartSection.classList.contains('hidden');
+
+            document.getElementById('main-content-view').classList.add('hidden');
+            document.getElementById('reviews-section').classList.add('hidden');
+            document.getElementById('admin-panel').classList.add('hidden');
+
+            if (isHidden) {
+                cartSection.classList.remove('hidden');
+                renderCart();
+            } else {
+                cartSection.classList.add('hidden');
+                document.getElementById('main-content-view').classList.remove('hidden');
+                renderProducts();
+            }
+        }
+
+        function submitCartOrder() {
+            if (cart.length === 0) {
+                alert('السلة فارغة، يرجى إضافة منتج أولاً.');
+                return;
+            }
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const phone2 = document.getElementById('cust-phone2').value.trim();
+            const email = document.getElementById('cust-email').value.trim();
+
+            if (!name || !phone) {
+                alert('يرجى إدخال الاسم ورقم الهاتف على الأقل.');
+                return;
+            }
+
+            let message = `🛒 طلب جديد من ${storeName}\n\n`;
+            cart.forEach(item => {
+                message += `- ${item.name} × ${item.qty} = ${(parseFloat(item.price) || 0) * item.qty}$\n`;
+            });
+            message += `\nالمجموع الكلي: ${getCartTotal()}$\n\n`;
+            message += `الاسم: ${name}\n`;
+            message += `الهاتف: ${phone}\n`;
+            if (phone2) message += `هاتف بديل: ${phone2}\n`;
+            if (email) message += `الإيميل: ${email}\n`;
+
+            const url = `https://wa.me/${savedPhone}?text=${encodeURIComponent(message)}`;
+            window
