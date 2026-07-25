@@ -49,7 +49,7 @@
             text-align: right;
         }
         #sidebar a {
-            padding: 12px 20px;
+            padding: 14px 20px;
             text-decoration: none;
             font-size: 15px;
             color: #2c3e50;
@@ -57,6 +57,7 @@
             transition: 0.3s;
             border-bottom: 1px solid #f1f1f1;
             cursor: pointer;
+            font-weight: bold;
         }
         #sidebar a:hover { background-color: #f8fafc; color: #2980b9; }
         #sidebar .close-btn {
@@ -80,28 +81,6 @@
             background: #fff;
             box-sizing: border-box;
             box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-        }
-
-        .category-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 15px;
-            justify-content: center;
-        }
-        .cat-tab {
-            background: #fff;
-            border: 1px solid #cbd5e1;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 13px;
-            cursor: pointer;
-            color: #2c3e50;
-            font-weight: bold;
-        }
-        .cat-tab.active {
-            background: #2980b9;
-            color: #fff;
-            border-color: #2980b9;
         }
 
         .products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; margin-bottom: 20px; }
@@ -153,46 +132,40 @@
 </head>
 <body>
 
-    <!-- أزرار العلیا (القائمة على اليمين، السلة على اليسار) -->
+    <!-- أزرار العليا (السلة على اليسار، القائمة على اليمين) -->
     <div class="container">
         <div class="top-nav-bar">
-            <button class="top-btn" onclick="toggleSidebar()">☰</button>
             <button class="top-btn" onclick="toggleCartModal()" style="position: relative;">
                 🛒 
                 <span id="cart-badge" style="position: absolute; top: -5px; right: -5px; background: #e74c3c; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 50%; display: none;">0</span>
             </button>
+            <button class="top-btn" onclick="toggleSidebar()">☰</button>
         </div>
 
-        <!-- القائمة الجانبية (تسحب من اليمين) -->
+        <!-- القائمة الجانبية (تسحب من اليمين وترتيبها المطلوب بالضبط) -->
         <div id="sidebar">
             <button class="close-btn" onclick="toggleSidebar()">✕</button>
             <h3 style="padding: 0 20px; color: #2c3e50; margin-bottom: 15px; text-align: right;">⚙️ القائمة الرئيسية</h3>
-            <a onclick="toggleSidebar(); openSettingsModal()">⚙️ الإعدادات (تعديل المتجر والدخول)</a>
-            <a onclick="toggleSidebar(); filterCategory('الكل'); switchTab('home')">🏠 الرئيسية والمنتجات</a>
-            <a onclick="toggleSidebar(); filterCategory('تطبيق'); switchTab('home')">📱 التطبيقات</a>
-            <a onclick="toggleSidebar(); filterCategory('لعبة'); switchTab('home')">🎮 الألعاب</a>
-            <a onclick="toggleSidebar(); switchTab('reviews')">💬 التعليقات والملاحظات</a>
+            <a onclick="toggleSidebar(); openSettingsModal()">1️⃣ ⚙️ الإعدادات (تسجيل المدير وتعديل المتجر)</a>
+            <a onclick="toggleSidebar(); filterCategory('تطبيق')">2️⃣ 📱 التطبيقات</a>
+            <a onclick="toggleSidebar(); filterCategory('لعبة')">3️⃣ 🎮 الألعاب</a>
+            <a onclick="toggleSidebar(); switchTab('reviews')">4️⃣ 💬 الملاحظات والتعليقات</a>
+            <a onclick="toggleSidebar(); filterCategory('الكل'); switchTab('home')" style="color: #27ae60;">🏠 العودة للرئيسية (الكل)</a>
             <a onclick="toggleSidebar(); logoutAdmin()" id="sidebar-logout-link" style="color: #e74c3c; display: none;">🚪 تسجيل خروج المدير</a>
         </div>
 
-        <!-- رأس الصفحة (الشعار والاسم القابل للتعديل من المدير) -->
+        <!-- رأس الصفحة (الشعار والاسم القابل للتعديل) -->
         <div style="margin-top: 15px; margin-bottom: 15px; display: flex; flex-direction: column; align-items: center;">
             <img id="header-logo" src="https://i.imgur.com/kHI9Abj.png" alt="Store Logo" style="width: 75px; height: 75px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.2); margin-bottom: 8px; border: 2px solid #2c3e50;">
             <h2 id="header-store-name" style="color: #2c3e50; margin: 0; font-size: 24px;">موني مود ستور</h2>
             <span id="header-store-sub" style="color: #e67e22; font-size: 13px; font-weight: bold; letter-spacing: 2px;">MONEY MOD STORE</span>
         </div>
-        <p style="color: #7f8c8d; font-size: 13px; margin-bottom: 15px;">عالمك الأسهل للحصول على أفضل الخدمات الرقمية فوراً</p>
+        <p id="current-view-title" style="color: #7f8c8d; font-size: 13px; margin-bottom: 15px;">عالمك الأسهل للحصول على أفضل الخدمات الرقمية فوراً</p>
 
-        <!-- التبويبات الرئيسية (الرئيسية، التطبيقات، الألعاب) -->
+        <!-- التبويب الرئيسي (عرض المنتجات والبحث) -->
         <div id="main-content-view">
             <div class="search-box">
                 <input type="text" id="search-input" placeholder="🔍 ابحث عن المنتج أو الخدمة..." oninput="filterProducts()">
-            </div>
-
-            <div class="category-tabs">
-                <div class="cat-tab active" onclick="filterCategory('الكل')">الكل</div>
-                <div class="cat-tab" onclick="filterCategory('تطبيق')">التطبيقات</div>
-                <div class="cat-tab" onclick="filterCategory('لعبة')">الألعاب</div>
             </div>
 
             <div id="products-list" class="products-grid"></div>
@@ -228,7 +201,7 @@
 
         <!-- قسم التعليقات والملاحظات للزبائن -->
         <div id="reviews-section" class="reviews-section hidden">
-            <h3 style="color: #2980b9; margin-top: 0;">💬 تعليقات وملاحظات الزبائن</h3>
+            <h3 style="color: #2980b9; margin-top: 0;">💬 الملاحظات والتعليقات</h3>
             <p style="font-size: 12px; color: #666;">شاركنا رأيك أو ملاحظتك حول المتجر والخدمات:</p>
             <input type="text" id="review-author" placeholder="اسمك الكريم">
             <textarea id="review-text" rows="3" placeholder="اكتب تعليقك أو ملاحظتك هنا..."></textarea>
@@ -237,7 +210,7 @@
             <div id="reviews-list" style="text-align: right;"></div>
         </div>
 
-        <!-- لوحة الإدارة (إضافة/تعديل المنتجات وإعدادات المتجر الخاصة بالمدير فقط) -->
+        <!-- لوحة الإدارة لإضافة وتعديل المنتجات -->
         <div id="admin-panel" class="admin-section">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <h4 id="admin-panel-title" style="color: #2980b9; margin: 0;">⚙️ إضافة منتج جديد</h4>
@@ -266,12 +239,12 @@
             <button class="action-btn" id="save-product-btn" onclick="saveProduct()" style="background-color: #2980b9; margin-top: 10px;">➕ نشر المنتج الجديد</button>
         </div>
 
-        <!-- نافذة إعدادات المدير وتعديل بيانات المتجر (الاسم والصورة) -->
+        <!-- نافذة إعدادات المدير (كلمة السر وتعديل اسم وشعار المتجر) -->
         <div id="settings-modal" class="admin-section hidden" style="border-color: #e67e22;">
-            <h4 style="color: #e67e22; margin-top: 0;">⚙️ إعدادات المتجر وصلاحيات المدير</h4>
+            <h4 style="color: #e67e22; margin-top: 0;">⚙️ إعدادات المدير والمتجر</h4>
             <div id="admin-login-area">
-                <p style="font-size: 13px; color: #555;">لتعديل اسم المتجر، شعاره، أو إضافة منتجات، يرجى إدخال كلمة السر:</p>
-                <input type="password" id="admin-pass-input" placeholder="أدخل كلمة السر (2026)">
+                <p style="font-size: 13px; color: #555;">يرجى إدخال كلمة السر الخاصة بالمدير للدخول وإدارة المتجر:</p>
+                <input type="password" id="admin-pass-input" placeholder="كلمة السر (أدخل: 2026)">
                 <button class="action-btn" onclick="verifyAdminLogin()" style="background-color: #e67e22; margin-top: 5px;">تسجيل دخول المدير 🔑</button>
             </div>
             <div id="admin-settings-area" class="hidden">
@@ -282,14 +255,14 @@
                 <label style="font-size: 12px; font-weight: bold;">تعديل شعار المتجر (صورة):</label>
                 <input type="file" id="setting-logo-file" accept="image/*" style="background: #f9f9f9; padding: 8px;">
 
-                <button class="action-btn" onclick="saveStoreSettings()" style="background-color: #27ae60; margin-top: 10px;">حفظ التعديلات العامة</button>
+                <button class="action-btn" onclick="saveStoreSettings()" style="background-color: #27ae60; margin-top: 10px;">حفظ اسم وشعار المتجر</button>
                 <button class="action-btn" onclick="logoutAdmin()" style="background-color: #e74c3c; margin-top: 5px;">تسجيل خروج المدير 🚪</button>
             </div>
             <button onclick="closeSettingsModal()" style="background: #95a5a6; color: white; border: none; padding: 6px; width: 100%; border-radius: 6px; margin-top: 10px; cursor: pointer;">إغلاق</button>
         </div>
     </div>
 
-    <!-- زر إضافة منتج عائم يظهر فقط للمدير -->
+    <!-- زر إضافة منتج عائم يظهر للمدير فقط -->
     <div id="floating-admin-btn" onclick="openAddMode()">+</div>
 
     <script>
@@ -364,7 +337,7 @@
         }
 
         function logoutAdmin() {
-            if (confirm("هل تريد تسجيل الخروج من صفحة المدير؟")) {
+            if (confirm("هل تريد تسجيل الخروج من حساب المدير؟")) {
                 localStorage.setItem('store_is_admin', 'false');
                 isRegisteredAdmin = false;
                 document.getElementById('floating-admin-btn').style.display = 'none';
@@ -384,4 +357,22 @@
 
         function updateStoreBranding() {
             document.getElementById('header-store-name').innerText = storeName;
-            document.getElement
+            document.getElementById('page-title').innerText = storeName + " : المتجر الرقمي";
+            document.getElementById('header-logo').src = storeLogo;
+            document.getElementById('site-favicon').href = storeLogo;
+        }
+
+        function saveStoreSettings() {
+            let newName = document.getElementById('setting-store-name').value.trim();
+            if (newName) {
+                storeName = newName;
+                localStorage.setItem('store_custom_name', storeName);
+            }
+
+            let fileInput = document.getElementById('setting-logo-file');
+            if (fileInput.files && fileInput.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    storeLogo = e.target.result;
+                    localStorage.setItem('store_custom_logo', storeLogo);
+                    updateStoreBra
