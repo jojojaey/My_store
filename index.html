@@ -243,7 +243,7 @@
             <h4 style="color: #e67e22; margin-top: 0;">⚙️ إعدادات المدير والمتجر</h4>
             <div id="admin-login-area">
                 <p style="font-size: 13px; color: #555;">يرجى إدخال كلمة السر الخاصة بالمدير للدخول وإدارة المتجر:</p>
-                <input type="password" id="admin-pass-input" placeholder="كلمة السر (أدخل: 2026)">
+                <input type="password" id="admin-pass-input" placeholder="أدخل كلمة السر">
                 <button class="action-btn" onclick="verifyAdminLogin()" style="background-color: #e67e22; margin-top: 5px;">تسجيل دخول المدير 🔑</button>
             </div>
             <div id="admin-settings-area" class="hidden">
@@ -378,4 +378,4 @@
                 reader.onload = function(e) {
                     storeLogo = e.target.result;
                     localStorage.setItem('store_custom_logo', storeLogo);
-                    updat
+                    updateStoreBr
