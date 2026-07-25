@@ -38,7 +38,7 @@
             height: 100%;
             width: 0;
             position: fixed;
-            z-index: 2000;
+            z-index: 3000;
             top: 0;
             right: 0;
             background-color: #fff;
@@ -103,7 +103,7 @@
         .edit-btn { background-color: #f39c12; color: white; border: none; padding: 5px; width: 50%; border-radius: 6px; font-size: 11px; cursor: pointer; display: none; font-weight: bold; }
         .delete-btn { background-color: #e74c3c; color: white; border: none; padding: 5px; width: 50%; border-radius: 6px; font-size: 11px; cursor: pointer; display: none; font-weight: bold; }
 
-        /* سلة المشتريات وقسم الطلب */
+        /* سلة المشتريات وقسم الطلب والإدارة */
         .cart-box, .order-box, .admin-section, .reviews-section { background: #fff; border-radius: 16px; padding: 15px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 2px solid #3498db; text-align: right; }
         .order-box input, .order-box textarea, .admin-section input, .admin-section select, .reviews-section textarea { width: 100%; padding: 10px; margin: 6px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-family: Tahoma; }
 
@@ -127,7 +127,7 @@
         }
         #floating-admin-btn:hover { background-color: #1f618d; }
 
-        .hidden { display: none; }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
@@ -162,7 +162,7 @@
         </div>
         <p id="current-view-title" style="color: #7f8c8d; font-size: 13px; margin-bottom: 15px;">عالمك الأسهل للحصول على أفضل الخدمات الرقمية فوراً</p>
 
-        <!-- التبويب الرئيسي (عرض المنتجات والبحث) -->
+        <!-- التبويب الرئيسي (عرض المنتجات والبحث بدون أزرار فئات بالواجهة) -->
         <div id="main-content-view">
             <div class="search-box">
                 <input type="text" id="search-input" placeholder="🔍 ابحث عن المنتج أو الخدمة..." oninput="filterProducts()">
@@ -210,8 +210,8 @@
             <div id="reviews-list" style="text-align: right;"></div>
         </div>
 
-        <!-- لوحة الإدارة لإضافة وتعديل المنتجات -->
-        <div id="admin-panel" class="admin-section">
+        <!-- لوحة الإدارة لإضافة وتعديل المنتجات (مخفية افتراضياً) -->
+        <div id="admin-panel" class="admin-section hidden">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <h4 id="admin-panel-title" style="color: #2980b9; margin: 0;">⚙️ إضافة منتج جديد</h4>
                 <button onclick="closeAdminPanel()" style="background: #e74c3c; width: auto; padding: 5px 10px; font-size: 12px; border:none; color:white; border-radius:5px; cursor:pointer;">إغلاق</button>
@@ -239,7 +239,7 @@
             <button class="action-btn" id="save-product-btn" onclick="saveProduct()" style="background-color: #2980b9; margin-top: 10px;">➕ نشر المنتج الجديد</button>
         </div>
 
-        <!-- نافذة إعدادات المدير (كلمة السر وتعديل اسم وشعار المتجر) -->
+        <!-- نافذة إعدادات المدير (كلمة السر وتعديل اسم وشعار المتجر - مخفية افتراضياً) -->
         <div id="settings-modal" class="admin-section hidden" style="border-color: #e67e22;">
             <h4 style="color: #e67e22; margin-top: 0;">⚙️ إعدادات المدير والمتجر</h4>
             <div id="admin-login-area">
@@ -262,7 +262,7 @@
         </div>
     </div>
 
-    <!-- زر إضافة منتج عائم يظهر للمدير فقط -->
+    <!-- زر إضافة منتج عائم يظهر للمدير فقط بعد تسجيل الدخول -->
     <div id="floating-admin-btn" onclick="openAddMode()">+</div>
 
     <script>
@@ -297,7 +297,7 @@
             document.getElementById('main-content-view').classList.add('hidden');
             document.getElementById('cart-section').classList.add('hidden');
             document.getElementById('reviews-section').classList.add('hidden');
-            document.getElementById('admin-panel').style.display = 'none';
+            document.getElementById('admin-panel').classList.add('hidden');
 
             if (tabName === 'home') {
                 document.getElementById('main-content-view').classList.remove('hidden');
@@ -341,7 +341,7 @@
                 localStorage.setItem('store_is_admin', 'false');
                 isRegisteredAdmin = false;
                 document.getElementById('floating-admin-btn').style.display = 'none';
-                document.getElementById('admin-panel').style.display = 'none';
+                document.getElementById('admin-panel').classList.add('hidden');
                 document.getElementById('sidebar-logout-link').style.display = 'none';
                 closeSettingsModal();
                 renderProducts();
@@ -374,5 +374,4 @@
                 let reader = new FileReader();
                 reader.onload = function(e) {
                     storeLogo = e.target.result;
-                    localStorage.setItem('store_custom_logo', storeLogo);
-                    updateStoreBra
+ 
